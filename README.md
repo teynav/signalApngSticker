@@ -39,7 +39,6 @@ You say so, but what have you done???
 7. https://signal.art/addstickers/#pack_id=249818aaf61019027e67397e6af41c4f&pack_key=1f42ecfc4162e5b90a176911967ce6aa30e00d996b6babe72b2172122df25e02
 8. https://signal.art/addstickers/#pack_id=82bbb0e722f3cfbfa73c981567c8f52b&pack_key=ff01047867757bebef2d6b3eea0cdca5da294013dc38433bf6d4e65064e11d24
 9. https://signal.art/addstickers/#pack_id=293f5ffc19efa5ec5e777c5de95929d2&pack_key=ea0f54e119172bddd959469f4d725c9ee37a43edfc310c49a28067de656bc800
-10. https://signal.art/addstickers/#pack_id=d511843bf15edcc2ed58354432dcaf56&pack_key=71e7d65cccc31ac6f6ca68f8ee0942e9f668ae4f62ce156e1fa6fdfe3a7c825f
 
 
 Owwww, That's nice , How can I help you
