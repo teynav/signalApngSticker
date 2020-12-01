@@ -1,5 +1,7 @@
 # signalApngSticker
 Convert Telegram Stickers (gif) to Apng (&lt;300) kb for Signal
+
+---
 This is my first github repo, do give me suggestions!!
 ---
 What do I need to run this program? Linux
