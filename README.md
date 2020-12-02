@@ -40,6 +40,7 @@ You say so, but what have you done???
 8. https://signal.art/addstickers/#pack_id=82bbb0e722f3cfbfa73c981567c8f52b&pack_key=ff01047867757bebef2d6b3eea0cdca5da294013dc38433bf6d4e65064e11d24
 9. https://signal.art/addstickers/#pack_id=293f5ffc19efa5ec5e777c5de95929d2&pack_key=ea0f54e119172bddd959469f4d725c9ee37a43edfc310c49a28067de656bc800
 10. https://signal.art/addstickers/#pack_id=86f00a7bff29a7869b1ca318566ab745&pack_key=31ef41ec65c2606e20e091c662e4e3d2743ba63f2af186e23ad971d53c0ec7cd
+------mostly newwer from here------
 11. https://signal.art/addstickers/#pack_id=a1a672ac3fa05e65f883ec4fbc1d225d&pack_key=6efdf440fe0c393764856718688c85056be14305e9174f8a686446d9375726e5
 12. https://signal.art/addstickers/#pack_id=14945401b315dfbbf9798aaa64576fea&pack_key=2cd2418d3fa96d360297b1b866afc21d90847a16fc8d642f27a1dbc288c75af6
 13. https://signal.art/addstickers/#pack_id=f8631c82dc81a9b24725dc94fd169670&pack_key=031bcf6c2922c6e954fa1a49acdc534b0111c15a8018bfea6cc72711ccf1c2bc
@@ -47,7 +48,18 @@ You say so, but what have you done???
 15. https://signal.art/addstickers/#pack_id=e3265a7f97f53b340cc6010f6ac01db8&pack_key=c4255477343a089f52dd880c79cbdd6b7495004b244c10469f94e40106496437
 16. https://signal.art/addstickers/#pack_id=6514feedeffde5017caca3fa4c86bd12&pack_key=493eefa127ad0f6980dd48374941dc7e0a4f666fa8cae4a11ac5b85f8cdd5a8d
 17. https://signal.art/addstickers/#pack_id=fd8c232fc71476fad14ee9700d07cb18&pack_key=94fd6ea0b35dd49dbc202825d42f4eef8174e88c6e2c1a55d1effef4bf9bf6b4
-
+18. https://signal.art/addstickers/#pack_id=d1da8a723d5a05c1604b3a76bce0c193&pack_key=2703f6d169020798da1f88e45e77755016b7fab3f8d3246fdec4b8d5c3f75e40
+19. https://signal.art/addstickers/#pack_id=37c23bb7dcd467d98aee9ca76e1b3313&pack_key=98cb227aa500af6db6c8e7559883f25b0a9b24738cc4b410728ef10955f2d9f0
+20. https://signal.art/addstickers/#pack_id=b94f064a0370cc90c26b1fca73fd3eee&pack_key=56d26b9060217e8eb25eb8bba33597520bede80d85e80f42bd31e729dd29c2a1
+21. https://signal.art/addstickers/#pack_id=70ce21c56d10da385a2d4cbd01b0a598&pack_key=a6720ed69612df5ddf7743c070d99916a34679039701eacb82d28f9587a208ae
+22. https://signal.art/addstickers/#pack_id=05cbed4d89e849f74b03757927ae73a0&pack_key=eb8aa8f1080fbcd30b25d0dd4b001dbc91ce5516830cc2fadac96fda2bd4df50
+23. https://signal.art/addstickers/#pack_id=35e7882efaeb30bb8e289f00603f731c&pack_key=dcc9d56d642a18b252923a9f15b301e601f44c2ef61c714e1d4bd2f131f3a406
+24. https://signal.art/addstickers/#pack_id=c33434436cb10a37963a9542fcf9b893&pack_key=11d39a4a28f739fd4ac2a0d804072e0fbb6ae3d549f98ad8d37fdb520d3c979b
+25. https://signal.art/addstickers/#pack_id=31c290aff32928b5b161b0d9fb1097d0&pack_key=6f989aecedfedadd1f76873cc5e4281e9772b891bbde45990eeb5a20be38ccf5
+26. https://signal.art/addstickers/#pack_id=51267505a33cee27471fc3c20dbe60ab&pack_key=d28d2e36221433fb3de105b387e4d9b94e7851b3f375945a3981d9bb4d1a5eb6
+27. https://signal.art/addstickers/#pack_id=ffea53554747992cbdb08af7a4d8503d&pack_key=32c5553fb840f4d3cc79a5d226f6ae463d0c0cf229b46b3c519c820e55344772
+28. https://signal.art/addstickers/#pack_id=05108c1b49e3bfb44b5fefc977a7b092&pack_key=03f18c89c7cde5e20fb1fda5253035d17fd20a0ba928aa5a4aa7d4652ea79cab
+29. https://signal.art/addstickers/#pack_id=84fd191e08c23c4f6006b9c79b5527b8&pack_key=42d738a1997235b379e9cd790543ff7050ffeb272b525c4f1d5cddf253e427ae
 
 
 Owwww, That's nice , How can I help you
