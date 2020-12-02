@@ -63,6 +63,8 @@ You say so, but what have you done???
 30. https://signal.art/addstickers/#pack_id=106e3684cdf352fa75e53031ac632e75&pack_key=f86ab9a41679a2cf854080227e5f5f47c722162a8597b9a65b94becac2dcf88e
 31. https://signal.art/addstickers/#pack_id=b2e36679c553fb53afea37fc9e0d2a72&pack_key=77ce98a2842bbbe6bf14cf5d372c2f950bd57d0c3119aa2024166dbd918eb303
 32. https://signal.art/addstickers/#pack_id=4b476385d6d7e99124f66760c6937252&pack_key=736214db826620abce430fde7adff0c1af1a97bbd2c58ce45961ee5dc31e0228
+33. https://signal.art/addstickers/#pack_id=e245c4a3c57afed5b182c3b272168466&pack_key=668ed691cebb200023aba746fd5f843f25dd39d1bea420444ff4d48f4ddaf148
+
 
 Owwww, That's nice , How can I help you
 1. Suggestions , Signal +919519873721
