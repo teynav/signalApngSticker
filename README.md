@@ -78,6 +78,9 @@ You say so, but what have you done???
 45. https://signal.art/addstickers/#pack_id=c3418a1c15c96da1be3271c154f82177&pack_key=26a268510c5ff1858d50a1ddf80dea862c45d00797c77e86be315f488fad3da2
 46. https://signal.art/addstickers/#pack_id=f679a710be51d240fc75e64ac10aef6b&pack_key=ae18be70c80e2fdedef90e95d5007ba9fa8fb86ec4f1cc1913053578d16888cf
 47. https://signal.art/addstickers/#pack_id=2c117ca27e01ca6ebb53d763c1ccbc2c&pack_key=6cddfcf981b1600bf352daedace2e086dccdd1ed486ccddfac1dd9feabd9bdf7
+48. https://signal.art/addstickers/#pack_id=a1c5cb861e12005b3371ae461f4d43b4&pack_key=a2adf5181b5676aae3f3ac2c376f7650d7eebbeab475eb25c3ee9cea9eaa4aac
+49. https://signal.art/addstickers/#pack_id=e0be187724e258c2236f493ac1744f04&pack_key=6ba0dcee8281f30de65885d5a2ae5ac6b9e564c8ba819dd76e690cd7f25f1352
+50. https://signal.art/addstickers/#pack_id=77cc8f2b489e0f70ddd7466326d78251&pack_key=85c6c6e0b429b0ddb1f01a479dc97b9bda046f6f724137c4d64a3e836c53f9ff
 
 Owwww, That's nice , How can I help you
 1. Suggestions , Signal +919519873721
