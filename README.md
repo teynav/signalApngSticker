@@ -85,3 +85,4 @@ You say so, but what have you done???
 Owwww, That's nice , How can I help you
 1. Suggestions , Signal +919519873721
 2. Donations , [PayPal](https://www.paypal.com/paypalme/my/profile) or UPI 9519873721@ybl 
+3. If you are using brave you can donate me directly.
