@@ -9,9 +9,12 @@ What do I need to install beforehand? Good question, Here's the list.
 1. gifsicle 
 2. imagemagick 
 3. apngasm 
-4. tgs-to-gif 
+4. tgs-to-gif
+
+---
 You can easily find these in your repo or AUR 
 With v2 you will be able to download these using script except for tgs-to-gif 
+---
 
 ## V2 of the script is handles uploading by it's own !!!!
 What does v2 of this script does?
