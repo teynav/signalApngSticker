@@ -9,10 +9,10 @@ sticker_name = text.split("/addstickers/")[1]
 sticker_set = bot.getStickerSet(sticker_name)
 ww=0
 ff = open("emoji", "w+")
+print("Downloading please wait!!")
 for i in sticker_set.stickers:
    i.get_file().download(str(ww)+".tgs")
    ww=ww+1
    ff.write(i.emoji[:1]+"\n")
-   print(i.emoji[:1])
     
 

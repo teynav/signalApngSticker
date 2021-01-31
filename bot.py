@@ -45,7 +45,7 @@ async def main():
     print ("uuid (DO NOT SHARE)="+uuid)
     print ("password (DO NOT SHARE)="+password)
     print ("Pack name = "+ pack.title )
-    async with StickersClient(os.environ[uuid], os.environ[password]) as client:
+    async with StickersClient(uuid,password) as client:
          pack_id, pack_key = await client.upload_pack(pack)
     print("Pack uploaded!\n\nhttps://signal.art/addstickers/#pack_id={}&pack_key={}".format(pack_id, pack_key))
 
