@@ -11,9 +11,17 @@ What do I need to install beforehand? Good question, Here's the list.
 3. apngasm 
 4. tgs-to-gif
 
+For v2 you need 2 more things to be preinstalled
+run on your system 
+
+1. sudo pip install python-telegram-bot
+2. sudo pip install signalstickers-client
+
 ---
 You can easily find these in your repo or AUR 
 With v2 you will be able to download these using script except for tgs-to-gif 
+For python requirements run pip commands 
+
 ---
 
 ## V2 of the script is handles uploading by it's own !!!!
