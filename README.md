@@ -10,14 +10,33 @@ What do I need to install beforehand? Good question, Here's the list.
 2. imagemagick 
 3. apngasm 
 4. tgs-to-gif 
-
 You can easily find these in your repo or AUR 
 
-What do this script do? 
+
+## V2 of the script is handles uploading by it's own !!!!
+What does v2 of this script does?
+
+Does all mentioned tasks of v1 , and then make stickerpack , uploads it
+Give you stickerpack link :")
+
+For v2 you need just the link to stickerpack, NO NEED TO DOWNLOAD TGS FILES
+Just have "https://t.me/addstickers/HalloUtya" and that's enough !!!!
+
+While setting up v2 for first time you might be asked some info for stickerpack-script
+for bot to upload on your behalf.
+
+Also you will need to setup a telegram bot using t.me/BotFather and get token of it :")
+
+Once done, from next time just sending link would be enough.
+
+
+What do this script do? (Just v1 )
 1. Convert tgs to gif
 2. optimize that gif
 3. breaks gif into frames
 4. Make apng out of those frames
+
+
 
 How do i do this?
 1. Install above mentioned packages
