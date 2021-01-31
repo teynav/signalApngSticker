@@ -11,7 +11,7 @@ What do I need to install beforehand? Good question, Here's the list.
 3. apngasm 
 4. tgs-to-gif 
 You can easily find these in your repo or AUR 
-
+With v2 you will be able to download these using script except for tgs-to-gif 
 
 ## V2 of the script is handles uploading by it's own !!!!
 What does v2 of this script does?
@@ -29,6 +29,7 @@ Also you will need to setup a telegram bot using t.me/BotFather and get token of
 
 Once done, from next time just sending link would be enough.
 
+---
 
 What do this script do? (Just v1 )
 1. Convert tgs to gif
