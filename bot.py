@@ -45,10 +45,12 @@ async def main():
     print ("uuid (DO NOT SHARE)="+uuid)
     print ("password (DO NOT SHARE)="+password)
     print ("Pack name = "+ pack.title )
+    ff=open("packs","a+")
     async with StickersClient(uuid,password) as client:
          pack_id, pack_key = await client.upload_pack(pack)
     print("Pack uploaded!\n\nhttps://signal.art/addstickers/#pack_id={}&pack_key={}".format(pack_id, pack_key))
-
+    ff.write("### Pack = "+pack.title+"\n\nhttps://signal.art/addstickers/#pack_id={}&pack_key={}".format(pack_id, pack_key)+"\n---\n")
+    ff.close() 
 if __name__ == '__main__':
     anyio.run(main)
 

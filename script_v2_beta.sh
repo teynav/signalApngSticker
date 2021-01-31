@@ -106,37 +106,32 @@ workplz()
 	apngasm tmp.png $(ls filepng* | tr '\n' ' ') -z0 
         workplz tmp.png 
 }
-
+INPUU=""
+NOTIFY="NO?"
+post () {
+	notify-send "In post with $1 and $(tty)"
+if [[ "$(tty)" == "not a tty" ]] ;
+then
+	  NOTIFY=""
+		if [ ! -f /usr/bin/zenity ] ;
+		then
+			notify-send "Please install zenity"
+			exit 1
+		fi
+		INPUU=$(zenity --entry --title="Sticker Pack Creator <3" --text="$1")
+		if [[ "$INPUU" == "" ]] ;
+		then
+			notify-send "Script cancelled"
+			exit 
+		fi 
+else
+		echo $1
+		read INPUU
+fi
+}
 #Output comes here
 
 mkdir output 
-#Collect all tgs files in directory
-rm pack 2>&1 > /dev/null 
-echo "Please input link to pack to be converted eg https://t.me/addstickers/HalloUtya "
-read pack
-echo  $pack > pack 
-if [ -f token ] ;
-then
-	log "Token found continuing"
-else
-	echo "Bot Token not found, Please use v1 if you have tgs , v2 is to download tgs requires bot token"
-	echo "You can input token now or exit"
-	read token
-	echo $token > token
-	echo "Enter author's name"
-	read author
-	echo $author >> token
-	echo "Now open Signal Desktop , Goto Menu -> Toggle Developers tools -> On there open Console"
-	echo "Paste output of window.reduxStore.getState().items.uuid_id"
-	read author 
-	echo $author >> token
-	echo "You are almost there"
-	echo "Paste output of window.reduxStore.getState().items.password"
-	read author 
-	echo $author >> token
-fi 
-python download.py 
-	
 #install dep
 depi () {
 	if [ -f /usr/bin/apt ]
@@ -198,10 +193,9 @@ installdep () {
 	  exit 1 
 	fi 
 
-}
-#Check if dependencies are installed
-installdep 
+} 
 
+maininstall() {
 for file in ./*.tgs 
 do
 	finalfilename=$(echo $file | sed -e "s/\.tgs/\.png/g" ) 
@@ -245,4 +239,66 @@ rm *.tgs
 rm *.gif
 rm *.png 
 echo "Time to upload pack, conversion has been done!!!!"
-python bot.py 
+
+if python3 bot.py 
+then
+	log "Pack uploaded"
+  if [[ "$NOTIFY" == "" ]];
+  then
+	  notify-send "Pack converted here at $(pwd)"
+  fi 
+else
+	echo "Pack wasn't uploaded run python bot.py in $(pwd)"
+  if [[ "$NOTIFY" == "" ]];
+  then
+	   notify-send  "Pack wasn't uploaded run python bot.py in $(pwd)"
+  fi
+  cat pack >> not_uploaded
+fi 
+}
+
+installdep
+#Collect all tgs files in directory
+rm pack 2>&1 > /dev/null
+if [ -f token ] ;
+then
+	log "Token found continuing"
+else
+	post "Telegram Bot Token not found, \n Please use v1 if you have tgs , \n v2 always downloads tgs requires bot token \n 
+ You can input token now or exit"
+	echo $INPUU > token
+	post "Enter author's name"
+	echo $INPUU >> token
+	post "Now open Signal Desktop ,\n Goto Menu -> Toggle Developers tools -> On there open Console \n Paste output of window.reduxStore.getState().items.uuid_id" 
+	echo $INPUU >> token
+	post  "You are almost there \n Paste output of window.reduxStore.getState().items.password"
+	echo $INPUU >> token
+fi
+if [ ! -f $1 ];
+then
+    post "Please input link to pack to be converted eg https://t.me/addstickers/HalloUtya" 
+    echo  $INPUU > pack
+    if python3 download.py
+		then
+       maininstall
+		 else
+			 cat $INPUU >> not_uploaded 
+		fi 
+else
+	   zmodload zsh/mapfile
+     FNAME=$1
+     FLINES=( "${(f)mapfile[$FNAME]}" )
+     LIST="${mapfile[$FNAME]}" # Not required unless stuff uses it
+     for iii in $FLINES
+     do 
+       echo "Installing" $iii
+       echo  "$iii" > pack
+       if python3 download.py
+			 then 
+					 maininstall
+			 else
+				 cat $iii >> not_uploaded
+			 fi 
+	   done 
+fi
+
