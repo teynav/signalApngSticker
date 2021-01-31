@@ -109,7 +109,7 @@ workplz()
 INPUU=""
 NOTIFY="NO?"
 post () {
-	notify-send "In post with $1 and $(tty)"
+#	notify-send "In post with $1 and $(tty)"
 if [[ "$(tty)" == "not a tty" ]] ;
 then
 	  NOTIFY=""
