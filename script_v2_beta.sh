@@ -274,7 +274,7 @@ else
 	post  "You are almost there \n Paste output of window.reduxStore.getState().items.password"
 	echo $INPUU >> token
 fi
-if [ ! -f $1 ];
+if [[ "$1" == "" ]] ;
 then
     post "Please input link to pack to be converted eg https://t.me/addstickers/HalloUtya" 
     echo  $INPUU > pack
