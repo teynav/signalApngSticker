@@ -50,12 +50,17 @@ What do this script do? (Just v1 )
 3. breaks gif into frames
 4. Make apng out of those frames
 
+How do i do this? (For v2 )
+1. Install above mentioned packages and python modules 
+2. Copy script_v2 , bot.py , download.py to a folder. 
+3. For first time you will be asked bot token and authentican info from Signal-Desktop
+4. Do you have link to Telegram-Sticker ? Enter it when prompted eg : https://t.me/addstickers/MsWitchCat
+5. Grab a coffee , Because you will now get link to signalstickerpack after wizardry is done !!!!
 
-
-How do i do this?
+How do i do this? (For v1 )
 1. Install above mentioned packages
 2. Copy your tgs into a folder
-3. Copy this script to same folder
+3. Copy this script_v1  to same folder
 4. Run it!!
 5. Wait for cpu to cook your apngs
 6. Look for all apngs in ./output/
