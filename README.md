@@ -62,7 +62,9 @@ How do i do this?
 7. Create stickerpack using those apngs all are below 300kb !!!
 
 You say so, but what have you done??? 
-(some of these were done using giff-older which used gif from @StickerDownloadBot of telegram it had artifacts, newer script.sh solves this issue where there were artifacts)
+(some of these were done using giff-older which used gif from @StickerDownloadBot of telegram it had artifacts, newer script_v1.sh solves this issue where there were artifacts)
+
+### With v2 porting becomes way easier since you don't have to be actively involved in porting
 
 [Contains 60+ stickerpack as of now ported from Telegram](https://signalstickers.com/?s=author%3A%22Navneet%20Vikram%20Tey%22)
 
