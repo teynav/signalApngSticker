@@ -298,7 +298,8 @@ else
 					 maininstall
 			 else
 				 cat $iii >> not_uploaded
-			 fi 
+			 fi
+			 echo -n "" > pack 
 	   done 
 fi
 
