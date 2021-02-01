@@ -26,7 +26,12 @@ async def main():
     bot= Bot(token)
     f = open("pack", "r")
     text = f.read()
-    sticker_name = text.split("/addstickers/")[1]
+    
+    sticker_name = ""
+    try:
+       sticker_name = text.split("/addstickers/")[1]
+    except:
+       sticker_name = text.split("eu/stickers/")[1]
     sticker_set = bot.getStickerSet(sticker_name)
     pack.title = sticker_set.name
     ww=0
