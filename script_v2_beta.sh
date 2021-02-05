@@ -101,7 +101,7 @@ workplz()
 		remove 5
 	else
 	#	echo "$1 already at best"
-		if [ ! -f tmp.png ]
+		if [[ ! -f tmp.png ]];
 		then
 			mv $1 tmp.png 
 		fi
@@ -114,8 +114,54 @@ workplz()
 	apngasm tmp.png $(ls filepng* | tr '\n' ' ') -z0 > /dev/null 
         workplz tmp.png 
 }
+
 INPUU=""
 NOTIFY="NO?"
+IN_BACKUP="0"
+
+installbak() {
+
+zmodload zsh/mapfile
+FNAME=".backup"
+FLINES=( "${(f)mapfile[$FNAME]}" )
+for i in $FLINES 
+do
+    cp -f .backup/$i/pack pack
+		cp -rf .backup/$i/output output
+		cp -r .backup/$i/emoji emoji 
+
+		if python3 bot.py
+		then
+			log "Pack $i $(cat pack) uploaded"
+			sed "/^$i$/d" .backup 
+    else
+			log "Please check network connection!!!"
+			notify-send "Can't still upload pack"
+			exit 1
+		fi
+
+		rm -rf .backup/$i 
+done
+
+}
+if [[  -f .backup ] && [ ! -s .backup ]]
+then
+  if [[ "$(tty)" == "not a tty" ]] ;
+  then
+       if zenity --question --text "Backup file found, Do you want to upload those stickers which are left out?"
+			 then
+            installbak 
+       fi
+	else
+		echo  "Backup file found, Do you want to upload those stickers which are left out? (N/y)"
+    read xxx 
+		if [[ "$xxx" == "y" ] || [ "$xxx" == "Y" ]];
+		then 
+		   installbak
+		fi
+	fi
+fi
+
 post () {
 #	notify-send "In post with $1 and $(tty)"
 if [[ "$(tty)" == "not a tty" ]] ;
@@ -137,9 +183,11 @@ else
 		read INPUU
 fi
 }
-#Output comes here
-
-mkdir output 
+#Output comes here 
+if [[ ! -d ./output ]]
+then
+   mkdir output 
+fi 
 #install dep
 depi () {
 	if [ -f /usr/bin/apt ]
@@ -249,6 +297,7 @@ done
 rm *.tgs 
 rm *.gif
 rm *.png 
+rm -rf output
 echo "Time to upload pack, conversion has been done!!!!"
 
 if python3 bot.py 
