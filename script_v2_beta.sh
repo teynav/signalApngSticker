@@ -42,7 +42,7 @@ remove()
 	else
 		a=(5 10)
 	fi
-	log $1
+#	log $1
 	let "val=1"
   for file in ./filepng*.png
 	do
@@ -233,7 +233,7 @@ do
 	rm output.gif
 	log "Avg Frame Delay = $totalloop \n Total Frame = $total \n Counter Variable for delay = $counter \n File = $file "
 	log "Converting gif !--!"
-	gifsicle -U $file  -d $totalloop  `seq -f "#%g" 0 $counter $total` -O9 --colors 256  -o output.gif > /dev/null 
+	gifsicle -U $file  -d $totalloop  `seq -f "#%g" 0 $counter $total` -O9 --colors 256  -o output.gif 2>&1 > /dev/null 
 	
 	file1=output.gif
 	convert -compress LZW   -coalesce $file1  filepng%02d.png
