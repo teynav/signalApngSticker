@@ -122,7 +122,7 @@ IN_BACKUP="0"
 installbak() {
 
 zmodload zsh/mapfile
-FNAME=".backup"
+FNAME=".back"
 FLINES=( "${(f)mapfile[$FNAME]}" )
 for i in $FLINES 
 do
@@ -130,21 +130,26 @@ do
 		cp -rf .backup/$i/output output
 		cp -r .backup/$i/emoji emoji 
 
-		if python3 bot.py
+		if python3 bot.py 2> /dev/null
 		then
 			log "Pack $i $(cat pack) uploaded"
-			sed "/^$i$/d" .backup 
+			sed "/^$i$/d" .back > .back 
     else
 			log "Please check network connection!!!"
 			notify-send "Can't still upload pack"
 			exit 1
 		fi
-
 		rm -rf .backup/$i 
 done
-
+echo "-------"
+echo "All backups have been uploaded !!!"
+echo "-------"
+notify-send "All backups have been uploaded, Continue!"
+echo -n "" > pack 
+echo -n "" > emoji
+rm -rf output 
 }
-if [[  -s .backup ]];
+if [[  -s .back ]];
 then
   if [[ "$(tty)" == "not a tty" ]] ;
   then
@@ -155,9 +160,14 @@ then
 	else
 		echo  "Backup file found, Do you want to upload those stickers which are left out? (N/y)"
     read xxx 
-		if [ "$xxx" == "y" ] || [ "$xxx" == "Y" ];
+		if [[ "$xxx" == "y" ]];
 		then 
 		   installbak
+		elif [[ "$xxx" == "Y" ]];
+		then
+			installbak
+		else
+			log "Skipped backup"
 		fi
 	fi
 fi
@@ -255,9 +265,9 @@ dobackup() {
 	then
 		mkdir .backup 
 	fi 
-	if [[ ! -f .backup ]];
+	if [[ ! -f .back ]];
 	then
-		touch .backup
+		touch .back
 	fi 
 	for i in {0..100..1}
 	do 
@@ -266,7 +276,7 @@ dobackup() {
 			continue
 		fi 
     mkdir .backup/$i 
-	  echo $i >> .backup 
+	  echo $i >> .back 
 		cp -rf output .backup/$i/ 
 		cp emoji .backup/$i/
 		cp pack .backup/$i/ 
@@ -321,10 +331,9 @@ done
 rm *.tgs 
 rm *.gif
 rm *.png 
-rm -rf output
 echo "Time to upload pack, conversion has been done!!!!"
 
-if python3 bot.py 
+if python3 bot.py 2> /dev/null 
 then
 	log "Pack uploaded"
   if [[ "$NOTIFY" == "" ]];
@@ -332,14 +341,15 @@ then
 	  notify-send "Pack converted here at $(pwd)"
   fi 
 else
-	echo "Pack wasn't uploaded run python bot.py in $(pwd)"
+	echo "Pack wasn't uploaded Doing backup !! "
   if [[ "$NOTIFY" == "" ]];
   then
-	   notify-send  "Pack wasn't uploaded run python bot.py in $(pwd)"
+	   notify-send  "Pack wasn't uploaded Doing backup !!"
   fi
   dobackup
   #cat pack >> not_uploaded
-fi 
+fi
+rm -rf output
 }
 
 installdep
@@ -363,10 +373,12 @@ if [[ "$1" == "" ]] ;
 then
     post "Please input link to pack to be converted eg https://t.me/addstickers/HalloUtya" 
     echo  $INPUU > pack
-    if python3 download.py
+    if python3 download.py 2> /dev/null 
 		then
        maininstall
 		 else
+			 log "Can't download pack"
+			 notify-send "Can't download pack"
 			 cat $INPUU >> not_uploaded 
 		fi 
 else
@@ -378,10 +390,12 @@ else
      do 
        echo "Installing" $iii
        echo  "$iii" > pack
-       if python3 download.py
+       if python3 download.py 2> /dev/null 
 			 then 
 					 maininstall
 			 else
+				 log "Can't download pack $iii"
+				 notify-send "Can't download pack $iii"
 				 cat $iii >> not_uploaded
 			 fi
 	   done 
