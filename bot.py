@@ -40,10 +40,11 @@ async def main():
        emoji_i = emoji.readline().split("\n")[0]
        file = "output/"+str(ww)+".png"
        add_sticker(file , emoji_i )
-       print (file + " corresponds to " + emoji_i)
+#      print (file + " corresponds to " + emoji_i)
        ww=ww+1
     # Specifying a cover is optional
     # Instanciate the client with your Signal crendentials
+    print("-->")
     print("Final stage Uploading is gonna start now!!!!!")
     print ("token  ="+token )
     print ("author ="+author )
