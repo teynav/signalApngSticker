@@ -23,11 +23,9 @@ log()
 #
 #apnggasm doesn't work for files not in sequence as here , Hence this function ensures it's in sequence
 #after removing filepng02, it makes filepng03 become filepng02.
-
 remove()
 {
-	ref=("01" "02" "03" "04" "05" "06" "07" "08" "09" "10" "11" "12" "13" "14" "15" "16" "17" "18" "19" "20" "21" "22" "23" "24" "25" "26" "27" "28" "29" "30")
-	let "count=0"
+	ref=("00" "01" "02" "03" "04" "05" "06" "07" "08" "09" "10" "11" "12" "13" "14" "15" "16" "17" "18" "19" "20" "21" "22" "23" "24" "25" "26" "27" "28" "29" "30")
 	a=(1)
 	if [ $1 -eq "1" ]
 	then
@@ -46,30 +44,37 @@ remove()
 	fi
 	log $1
 	let "val=1"
-        for file in ./filepng*.png
+  for file in ./filepng*.png
 	do
-		let "got=0"
-              for i in $a
-              do
-	     # log "checking $file with index $i at index $val"
+        for i in $a
+        do
+	         #  log "checking $file with index $i at index $val"
 	           if [ $val -eq $i ]
-	            then
-			got=1
-		        #log "removing $file at index $i" 
-			rm $file 
-			break 
+	           then
+						#	 log "removing file $file"
+			          rm $file 
+			       break 
 	           fi
-              done
-	if [ $got -eq "0" ]
-	then
-		let "count=$count+1"
-		mv $file "filepng"${ref[$count]}".png"
-	#	log "${ref[$count]}"
-		
-	fi
-        let "val=$val+1"
         done
+        let "val=$val+1"
+  done
+	let "count=1"
+	for file in ./filepng*.png 
+	do
+		newfname="./filepng${ref[$count]}.png"
+		let "count=$count+1"
+		#log "Comparing $file against newname $newfname"
+		if [[ "$newfname" == "$file" ]];
+		then 
+			continue
+		else
+#			log "Moving $file to $newfname"
+			mv $file $newfname
+		fi 
+  done 
 }
+
+
 
 # Depending on file size decide how many frames to drop and call "remove" for it
 # Then collect all pngs left after dropping frames to create new file and check for it's size.
@@ -102,8 +107,11 @@ workplz()
 		fi
 		return
 	fi
-	rm tmp.png  
-	apngasm tmp.png $(ls filepng* | tr '\n' ' ') -z0 
+	if [[ -f tmp.png ]];
+	then
+	  rm tmp.png  
+	fi 
+	apngasm tmp.png $(ls filepng* | tr '\n' ' ') -z0 > /dev/null 
         workplz tmp.png 
 }
 INPUU=""
@@ -224,13 +232,15 @@ do
 	let "totalloop=$totalloop/$total"
 	rm output.gif
 	log "Avg Frame Delay = $totalloop \n Total Frame = $total \n Counter Variable for delay = $counter \n File = $file "
-	gifsicle -U $file  -d $totalloop  `seq -f "#%g" 0 $counter $total` -O9 --colors 256  -o output.gif
+	log "Converting gif !--!"
+	gifsicle -U $file  -d $totalloop  `seq -f "#%g" 0 $counter $total` -O9 --colors 256  -o output.gif > /dev/null 
 	
-	file=output.gif
-	convert -compress LZW   -coalesce $file  filepng%02d.png
-	newf=$(echo $file | sed -e "s/\.gif/\.png/g" ) 
+	file1=output.gif
+	convert -compress LZW   -coalesce $file1  filepng%02d.png
+	newf=$(echo $file1 | sed -e "s/\.gif/\.png/g" ) 
 	
-	apngasm $newf filepng*
+	echo "Now converting $file"
+	apngasm $newf filepng*  > /dev/null 
 	workplz $newf 
 	mv tmp.png ./output/$finalfilename
 	rm filepng*
@@ -299,7 +309,5 @@ else
 			 else
 				 cat $iii >> not_uploaded
 			 fi
-			 echo -n "" > pack 
 	   done 
 fi
-
