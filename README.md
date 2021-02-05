@@ -13,8 +13,9 @@ What do I need to install beforehand? Good question, Here's the list.
 2. imagemagick 
 3. apngasm 
 4. [tgs-to-gif](https://github.com/ed-asriyan/tgs-to-gif/tree/master-cpp)
-5. sudo pip install python-telegram-bot ( For v2 only )
-6. sudo pip install signalstickers-client ( For v2 only )
+5. zsh (soon to be replaced with bash)
+6. sudo pip install python-telegram-bot ( For v2 only )
+7. sudo pip install signalstickers-client ( For v2 only )
 
 ---
 You can easily find these in your repo or AUR 
