@@ -136,7 +136,7 @@ info () {
 	 echo "$1"
  fi
 }
- installbak() {
+installbak() {
 
 zmodload zsh/mapfile
 FNAME=".back"
@@ -165,29 +165,6 @@ echo -n "" > emoji
 rm -rf output 
 }
 
-if [[  -s .back ]];
-then
-  if [[ "$(tty)" == "not a tty" ]] ;
-  then
-       if zenity --question --text "Backup file found, Do you want to upload those stickers which are left out?"
-			 then
-            installbak 
-       fi
-	else
-		echo  "Backup file found, Do you want to upload those stickers which are left out? (N/y)"
-    read xxx 
-		if [[ "$xxx" == "y" ]];
-		then 
-		   installbak
-		elif [[ "$xxx" == "Y" ]];
-		then
-			installbak
-		else
-			log "Skipped backup"
-		fi
-	fi
-fi
-
 post () {
 #	notify-send "In post with $1 and $(tty)"
 if [[ "$NOTIFY" == "" ]] ;
@@ -209,10 +186,6 @@ else
 fi
 }
 #Output comes here 
-if [[ ! -d ./output ]]
-then
-   mkdir output 
-fi 
 #install dep
 depi () {
 	if [ -f /usr/bin/apt ]
@@ -361,6 +334,34 @@ rm -rf output
 
 installdep
 #Collect all tgs files in directory
+if [[  -s .back ]];
+then
+  if [[ "$(tty)" == "not a tty" ]] ;
+  then
+       if zenity --question --text "Backup file found, Do you want to upload those stickers which are left out?"
+			 then
+            installbak 
+       fi
+	else
+		echo  "Backup file found, Do you want to upload those stickers which are left out? (N/y)"
+    read xxx 
+		if [[ "$xxx" == "y" ]];
+		then 
+		   installbak
+		elif [[ "$xxx" == "Y" ]];
+		then
+			installbak
+		else
+			log "Skipped backup"
+		fi
+	fi
+fi
+
+if [[ ! -d ./output ]]
+then
+   mkdir output 
+fi 
+
 rm pack 2>&1 > /dev/null
 if [ -f token ] ;
 then
