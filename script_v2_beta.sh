@@ -295,7 +295,7 @@ dobackup() {
 		cp -rf output .backup/$i/ 
 		cp emoji .backup/$i/
 		cp pack .backup/$i/ 
-		log "Couldn't Upload hence backup created in folder .output/$i , rerun script to do backup"
+		log "Couldn't Upload hence backup created in folder .output/$i , rerun script to do Upload"
 		break
 	done 
 }
