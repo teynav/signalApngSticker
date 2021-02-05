@@ -118,8 +118,25 @@ workplz()
 INPUU=""
 NOTIFY="NO?"
 IN_BACKUP="0"
+ if [[ "$(tty)" == "not a tty" ]] ;
+ then 
+      NOTIFY=""
+ fi 
 
-installbak() {
+info () {
+ if [[ "$NOTIFY" == "" ]] ;
+ then 
+	 if [[ "$2" == "" ]];
+	 then
+		 notify-send "$1"
+	 else
+		 zenity --info --text="$1"
+	 fi
+ else
+	 echo "$1"
+ fi
+}
+ installbak() {
 
 zmodload zsh/mapfile
 FNAME=".back"
@@ -135,20 +152,19 @@ do
 			log "Pack $i $(cat pack) uploaded"
 			sed "/^$i$/d" .back > .back 
     else
-			log "Please check network connection!!!"
-			notify-send "Can't still upload pack"
+			info "Please check network connection!!!" 1
 			exit 1
 		fi
 		rm -rf .backup/$i 
 done
 echo "-------"
-echo "All backups have been uploaded !!!"
+info "All backups have been uploaded !!! Continuing?" 1 
 echo "-------"
-notify-send "All backups have been uploaded, Continue!"
 echo -n "" > pack 
 echo -n "" > emoji
 rm -rf output 
 }
+
 if [[  -s .back ]];
 then
   if [[ "$(tty)" == "not a tty" ]] ;
@@ -174,9 +190,8 @@ fi
 
 post () {
 #	notify-send "In post with $1 and $(tty)"
-if [[ "$(tty)" == "not a tty" ]] ;
+if [[ "$NOTIFY" == "" ]] ;
 then
-	  NOTIFY=""
 		if [ ! -f /usr/bin/zenity ] ;
 		then
 			notify-send "Please install zenity"
@@ -335,17 +350,9 @@ echo "Time to upload pack, conversion has been done!!!!"
 
 if python3 bot.py 2> /dev/null 
 then
-	log "Pack uploaded"
-  if [[ "$NOTIFY" == "" ]];
-  then
-	  notify-send "Pack converted here at $(pwd)"
-  fi 
+	info  "Pack uploaded $(cat pack)"
 else
-	echo "Pack wasn't uploaded Doing backup !! "
-  if [[ "$NOTIFY" == "" ]];
-  then
-	   notify-send  "Pack wasn't uploaded Doing backup !!"
-  fi
+	info "Pack wasn't uploaded Doing backup !! "
   dobackup
   #cat pack >> not_uploaded
 fi
@@ -377,8 +384,7 @@ then
 		then
        maininstall
 		 else
-			 log "Can't download pack"
-			 notify-send "Can't download pack"
+			 info "Can't download pack"
 			 cat $INPUU >> not_uploaded 
 		fi 
 else
@@ -394,8 +400,7 @@ else
 			 then 
 					 maininstall
 			 else
-				 log "Can't download pack $iii"
-				 notify-send "Can't download pack $iii"
+				 info "Can't download pack $iii"
 				 cat $iii >> not_uploaded
 			 fi
 	   done 
