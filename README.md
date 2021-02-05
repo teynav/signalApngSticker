@@ -6,7 +6,6 @@ to friends when you are back :")
 ---
 ## Welcome :")
 
----
 What do I need to run this program? Linux
 
 What do I need to install beforehand? Good question, Here's the list.
@@ -14,12 +13,8 @@ What do I need to install beforehand? Good question, Here's the list.
 2. imagemagick 
 3. apngasm 
 4. [tgs-to-gif](https://github.com/ed-asriyan/tgs-to-gif/tree/master-cpp)
-
-For v2 you need 2 more things to be preinstalled
-run on your system 
-
-1. sudo pip install python-telegram-bot
-2. sudo pip install signalstickers-client
+5. sudo pip install python-telegram-bot ( For v2 only )
+6. sudo pip install signalstickers-client ( For v2 only )
 
 ---
 You can easily find these in your repo or AUR 
@@ -27,7 +22,16 @@ With v2 you will be able to download these using script except for tgs-to-gif
 For python requirements run pip commands 
 
 ---
+### Usage of v2 script
 
+```
+./script_v2_beta.sh 
+
+./script_v2_beta.sh <filename>
+
+Where file has list of Telegram sticker links
+
+```
 ## V2 of the script is handles uploading by it's own !!!!
 What does v2 of this script does?
 
@@ -37,23 +41,12 @@ Give you stickerpack link :")
 For v2 you need just the link to stickerpack, NO NEED TO DOWNLOAD TGS FILES
 Just have "https://t.me/addstickers/HalloUtya" and that's enough !!!!
 
-While setting up v2 for first time you might be asked some info for stickerpack-script
-for bot to upload on your behalf.
+While setting up v2 for first time you might be asked some info for signalstickerpack-client script
+for bot to upload on your behalf, using your account credentials.
 
-Also you will need to setup a telegram bot using t.me/BotFather and get token of it :")
+Also you will need to setup a telegram bot using [BotFather](https://t.me/BotFather) and get token of it :")
 
 Once done, from next time just sending link would be enough.
-
-### Usage of v2 script
-
-```
-./script_v2_beta.sh 
-
-./script_v2_beta.sh <filename>
-
-Where filename has list of Telegram sticker links
-
-```
 
 ---
 
