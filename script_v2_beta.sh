@@ -362,7 +362,7 @@ then
    mkdir output 
 fi 
 
-rm pack 2>&1 > /dev/null
+rm pack > /dev/null 2>&1
 if [ -f token ] ;
 then
 	log "Token found continuing"

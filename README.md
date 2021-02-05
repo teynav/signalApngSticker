@@ -4,14 +4,16 @@ And uploads it while you grab a coffee and makes sure you have it to send it
 to friends when you are back :")
 
 ---
-This is my first github repo, do give me suggestions!!
+## Welcome :")
+
 ---
 What do I need to run this program? Linux
+
 What do I need to install beforehand? Good question, Here's the list.
 1. gifsicle 
 2. imagemagick 
 3. apngasm 
-4. tgs-to-gif
+4. [tgs-to-gif](https://github.com/ed-asriyan/tgs-to-gif/tree/master-cpp)
 
 For v2 you need 2 more things to be preinstalled
 run on your system 
@@ -41,6 +43,17 @@ for bot to upload on your behalf.
 Also you will need to setup a telegram bot using t.me/BotFather and get token of it :")
 
 Once done, from next time just sending link would be enough.
+
+### Usage of v2 script
+
+```
+./script_v2_beta.sh 
+
+./script_v2_beta.sh <filename>
+
+Where filename has list of Telegram sticker links
+
+```
 
 ---
 
