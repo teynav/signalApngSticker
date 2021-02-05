@@ -144,7 +144,7 @@ do
 done
 
 }
-if [[  -f .backup ] && [ ! -s .backup ]];
+if [[  -s .backup ]];
 then
   if [[ "$(tty)" == "not a tty" ]] ;
   then
@@ -155,7 +155,7 @@ then
 	else
 		echo  "Backup file found, Do you want to upload those stickers which are left out? (N/y)"
     read xxx 
-		if [[ "$xxx" == "y" ] || [ "$xxx" == "Y" ]];
+		if [ "$xxx" == "y" ] || [ "$xxx" == "Y" ];
 		then 
 		   installbak
 		fi
@@ -271,7 +271,10 @@ dobackup() {
 		cp emoji .backup/$i/
 		cp pack .backup/$i/ 
 		log "Couldn't Upload hence backup created in folder .output/$i , rerun script to do backup"
+		break
+	done 
 }
+
 maininstall() {
 for file in ./*.tgs 
 do
