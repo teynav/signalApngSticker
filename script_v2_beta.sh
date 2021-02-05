@@ -144,7 +144,7 @@ do
 done
 
 }
-if [[  -f .backup ] && [ ! -s .backup ]]
+if [[  -f .backup ] && [ ! -s .backup ]];
 then
   if [[ "$(tty)" == "not a tty" ]] ;
   then
@@ -250,7 +250,28 @@ installdep () {
 	fi 
 
 } 
-
+dobackup() {
+	if [[ ! -d .backup ]];
+	then
+		mkdir .backup 
+	fi 
+	if [[ ! -f .backup ]];
+	then
+		touch .backup
+	fi 
+	for i in {0..100..1}
+	do 
+		if [[ -d .backup/$i ]];
+		then
+			continue
+		fi 
+    mkdir .backup/$i 
+	  echo $i >> .backup 
+		cp -rf output .backup/$i/ 
+		cp emoji .backup/$i/
+		cp pack .backup/$i/ 
+		log "Couldn't Upload hence backup created in folder .output/$i , rerun script to do backup"
+}
 maininstall() {
 for file in ./*.tgs 
 do
@@ -313,7 +334,8 @@ else
   then
 	   notify-send  "Pack wasn't uploaded run python bot.py in $(pwd)"
   fi
-  cat pack >> not_uploaded
+  dobackup
+  #cat pack >> not_uploaded
 fi 
 }
 
