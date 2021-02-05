@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash 
 
 # This is function I used to keep log instead of echo since you can comment the line #1 in the function and there would be no log
 # This is easier than editing every other echo and removing it sometimes.
@@ -6,7 +6,7 @@ log()
 { 
 	echo $1
 }
-
+#set -- "list"
 #This function removes some frames depending on total size of resultant png
 #If it's more than 700kb (look at "workplz") then $1 is 1 , and frames removed are 
 # 		a=(2 5 7 8 11 13 14 17 20 22 26 30)
@@ -80,7 +80,7 @@ remove()
 # Then collect all pngs left after dropping frames to create new file and check for it's size.
 # if it's <300 kb then it's alright!!!!!
 # otherwise redo the process again :"(
-
+FILE_I=$1 
 workplz()
 {
 	a=$(du "$1" | sed -e "s/\s.*png//")
@@ -116,15 +116,17 @@ workplz()
 }
 
 INPUU=""
-NOTIFY="NO?"
+NOTIFY="NO"
 IN_BACKUP="0"
+TOTALF="0"
+let "COUNTER=0"
  if [[ "$(tty)" == "not a tty" ]] ;
  then 
       NOTIFY=""
  fi 
 
 info () {
- if [[ "$NOTIFY" == "" ]] ;
+ if [[ "$NOTIFY" == "" ]];
  then 
 	 if [[ "$2" == "" ]];
 	 then
@@ -136,12 +138,13 @@ info () {
 	 echo "$1"
  fi
 }
-installbak() {
 
-zmodload zsh/mapfile
-FNAME=".back"
-FLINES=( "${(f)mapfile[$FNAME]}" )
-for i in $FLINES 
+installbak() {
+a=$(cat .back)
+SAVEIFS=$IFS   # Save current IFS
+IFS=$'\n'      # Change IFS to new line
+a=($a) 
+for i in "${a[@]}" 
 do
     cp -f .backup/$i/pack pack
 		cp -rf .backup/$i/output output
@@ -181,7 +184,7 @@ then
 			exit 
 		fi 
 else
-		echo $1
+		printf "$1\n"
 		read INPUU
 fi
 }
@@ -274,9 +277,17 @@ dobackup() {
 }
 
 maininstall() {
+TOTALF=$(ls *.tgs | wc -l )
+if [[ ! -d ./output ]]
+then
+   mkdir output 
+fi 
+log "---------"
+log "Total Files $TOTALF"
+
 for file in ./*.tgs 
 do
-	finalfilename=$(echo $file | sed -e "s/\.tgs/\.png/g" ) 
+	finalfilename=$(echo $file | sed -e "s/\.tgs/\.png/g" | sed -e "s/^\.\///g" ) 
 	tgs-to-gif -f 30 $file 
 	file="$file.gif"
 	counter=1
@@ -285,7 +296,7 @@ do
 	let "counter=$counter+1"
         if [ $counter -gt "7" ]
 	then
-		echo "You will be suffering here but I am continuing"
+		echo "# You will be suffering here but I am continuing"
 	fi
 	#Running loop to find average frame delay , just for better working case
 	let "total=$total-1"
@@ -300,25 +311,33 @@ do
 	let "total=$total+1"
         let "totalloop=$totalloop*$counter"
 	let "totalloop=$totalloop/$total"
-	rm output.gif
+	if [[ -f output.gif ]];
+	then
+	   rm output.gif
+	fi 
 	log "----------------------"
-	log "Avg Frame Delay = $totalloop \n Total Frame = $total \n Dividing total frame by = $counter \n Working on  = $file "
-	log "Converting gif !--!"
+	printf "Avg Frame Delay = $totalloop \n Total Frame = $total \n Dividing total frame by = $counter \n Working on  = $file "
+	log "# Converting gif !--! $file"
 	gifsicle -U $file  -d $totalloop  `seq -f "#%g" 0 $counter $total` -O9 --colors 255  -o output.gif  >/dev/null  2>&1
 	
 	file1=output.gif
 	convert -compress LZW   -coalesce $file1  filepng%02d.png
 	newf=$(echo $file1 | sed -e "s/\.gif/\.png/g" ) 
 	
-	echo "Now making apng out of $file"
+	echo "# Making apng of $file"
 	apngasm $newf filepng*  > /dev/null 
 	workplz $newf 
 	mv tmp.png ./output/$finalfilename
 	rm filepng*
+	let "COUNTER=$COUNTER+1"
+	if [[ "$NOTIFY" == "" ]];
+	then
+		  echo $(( COUNTER * 100 / TOTALF ))
+	fi 
 done
 rm *.tgs 
 rm *.gif
-rm *.png 
+#rm *.png 
 echo "Time to upload pack, conversion has been done!!!!"
 
 if python3 bot.py 2> /dev/null 
@@ -332,13 +351,23 @@ fi
 rm -rf output
 }
 
+dosingle() {
+      if python3 download.py 2> /dev/null 
+	    then
+         maininstall
+		  else
+				info "Can't download pack $(cat pack)"
+			   cat pack >> not_uploaded 
+		  fi
+}
+
 installdep
 #Collect all tgs files in directory
 if [[  -s .back ]];
 then
-  if [[ "$(tty)" == "not a tty" ]] ;
+  if [[ "$NOTIFY" == "" ]] ;
   then
-       if zenity --question --text "Backup file found, Do you want to upload those stickers which are left out?"
+       if zenity --question --text "Backup file found, Do you want to upload those stickers which are left out?" 
 			 then
             installbak 
        fi
@@ -357,11 +386,6 @@ then
 	fi
 fi
 
-if [[ ! -d ./output ]]
-then
-   mkdir output 
-fi 
-
 rm pack > /dev/null 2>&1
 if [ -f token ] ;
 then
@@ -377,32 +401,76 @@ else
 	post  "You are almost there \n Paste output of window.reduxStore.getState().items.password"
 	echo $INPUU >> token
 fi
+
+takein() {
+	if [[ "$NOTIFY" == "" ]]
+	then
+		INPUU=$(zenity --text="Enter" --entry  --ok-label="Convert this" --extra-button="Choose file")
+		if [[ "$INPUU" == "Choose file" ]]
+		then
+		   INPUU=$(zenity --file-selection )
+			 set -- "$INPUU" 
+		fi 
+		if [[ "$INPUU" == "" ]]
+		then
+			exit 1
+		fi 
+	else
+		###
+		if [[ "$1" == "" ]]
+		then 
+		  post "Please input link to pack to be converted eg https://t.me/addstickers/HalloUtya" 
+      echo  $INPUU > pack
+		fi
+	fi 
+	  
+}
+takein 
 if [[ "$1" == "" ]] ;
 then
-    post "Please input link to pack to be converted eg https://t.me/addstickers/HalloUtya" 
-    echo  $INPUU > pack
-    if python3 download.py 2> /dev/null 
-		then
-       maininstall
-		 else
-			 info "Can't download pack"
-			 cat $INPUU >> not_uploaded 
-		fi 
+#	post "Please input link to pack to be converted eg https://t.me/addstickers/HalloUtya" 
+ # echo  $INPUU > pack
+	if [[ "$NOTIFY" == "" ]]
+	then
+		(
+	    dosingle 
+		) | zenity --progress \
+  --title="Cooking APNG's" \
+  --text="Downloading...." \
+  --percentage=0 \
+  --auto-close \
+  --auto-kill \
+	--width=500 
+		else
+		   dosingle 
+  	fi
 else
-	   zmodload zsh/mapfile
-     FNAME=$1
-     FLINES=( "${(f)mapfile[$FNAME]}" )
-     LIST="${mapfile[$FNAME]}" # Not required unless stuff uses it
-     for iii in $FLINES
+     TOT=$(cat $1 | wc -l )
+		 conv=1 
+	   aaaa=$(cat $1)
+     SAVEIFS=$IFS   # Save current IFS
+     IFS=$'\n'      # Change IFS to new line
+     aaaa=($aaaa)
+		 IFS=$SAVEIFS
+		 # split to array $names
+     for iii in "${aaaa[@]}"
      do 
-       echo "Installing" $iii
+       echo "# Installing" $iii
        echo  "$iii" > pack
-       if python3 download.py 2> /dev/null 
-			 then 
-					 maininstall
-			 else
-				 info "Can't download pack $iii"
-				 cat $iii >> not_uploaded
-			 fi
-	   done 
+	  if [[ "$NOTIFY" == "" ]]
+		then
+			(
+			 dosingle 
+		  ) | zenity --progress \
+				--title="Converting($conv/$TOT) $iii " \
+      --text="Downloading...." \
+      --percentage=0 \
+      --auto-close \
+      --auto-kill \
+	    --width=500 
+		 else
+		    dosingle 
+		 fi
+		 let "conv=$conv+1"
+	   done
 fi

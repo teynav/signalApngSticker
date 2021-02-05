@@ -51,6 +51,7 @@ async def main():
     print ("uuid (DO NOT SHARE)="+uuid)
     print ("password (DO NOT SHARE)="+password)
     print ("Pack name = "+ pack.title )
+    print ("-->")
     ff=open("packs","a+")
     async with StickersClient(uuid,password) as client:
          pack_id, pack_key = await client.upload_pack(pack)
