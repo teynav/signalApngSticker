@@ -100,7 +100,7 @@ workplz()
 	then
 		remove 5
 	else
-		echo "$1 already at best"
+	#	echo "$1 already at best"
 		if [ ! -f tmp.png ]
 		then
 			mv $1 tmp.png 
@@ -231,15 +231,16 @@ do
         let "totalloop=$totalloop*$counter"
 	let "totalloop=$totalloop/$total"
 	rm output.gif
-	log "Avg Frame Delay = $totalloop \n Total Frame = $total \n Counter Variable for delay = $counter \n File = $file "
+	log "----------------------"
+	log "Avg Frame Delay = $totalloop \n Total Frame = $total \n Dividing total frame by = $counter \n Working on  = $file "
 	log "Converting gif !--!"
-	gifsicle -U $file  -d $totalloop  `seq -f "#%g" 0 $counter $total` -O9 --colors 256  -o output.gif 2>&1 > /dev/null 
+	gifsicle -U $file  -d $totalloop  `seq -f "#%g" 0 $counter $total` -O9 --colors 255  -o output.gif  >/dev/null  2>&1
 	
 	file1=output.gif
 	convert -compress LZW   -coalesce $file1  filepng%02d.png
 	newf=$(echo $file1 | sed -e "s/\.gif/\.png/g" ) 
 	
-	echo "Now converting $file"
+	echo "Now making apng out of $file"
 	apngasm $newf filepng*  > /dev/null 
 	workplz $newf 
 	mv tmp.png ./output/$finalfilename
