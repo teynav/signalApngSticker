@@ -133,41 +133,44 @@ info () {
 	 then
 		 notify-send "$1"
 	 else
-		 zenity --info --text="$1"
+		 zenity --info --text="$1" --width="400"
 	 fi
  else
 	 echo "$1"
  fi
 }
-
+trap "echo exitting because my child killed me.>&2;exit" SIGUSR1
 installbak() {
 a=$(cat .back)
 SAVEIFS=$IFS   # Save current IFS
 IFS=$'\n'      # Change IFS to new line
-a=($a) 
+a=($a)
+ee=$$
 if [[ "$NOTIFY" == "" ]]
 then
  (
-  TOTl=$(cat .back | wc -l )
+  TOTx=$(cat .back | wc -l )
 	count=1
 	for i in "${a[@]}" 
 	do 
       cp -f .backup/$i/pack pack
 		  cp -rf .backup/$i/output output
 		  cp -r .backup/$i/emoji emoji 
-			echo "# Uploading ($count/$TOT1) $(cat pack)"
-			echo $(( $(( count - 1 )) * 100 / TOT))
+			echo "# Uploading ($count/$TOTx) $(cat pack)"
+			echo $(( count * 100 / TOTx ))
 		  if python3 bot.py 2> /dev/null 
 		  then
 			  log "# Pack $i $(cat pack) uploaded"
 			  sed "/^$i$/d" .back > .lss 
 				mv .lss .back 
+				rm -rf .backup/$i
       else
+				killall zenity 
 			  info " Please check network connection!!!" 1
-			exit 1
+				kill $ee 
+				kill $$
 		  fi
 			let "count=$count+1"
-		  rm -rf .backup/$i
 	 done 
 	 echo 100
   ) | zenity --progress \
