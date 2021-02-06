@@ -119,6 +119,7 @@ INPUU=""
 NOTIFY="NO"
 IN_BACKUP="0"
 TOTALF="0"
+FILE_I=""
 let "COUNTER=0"
  if [[ "$(tty)" == "not a tty" ]] ;
  then 
@@ -144,22 +145,57 @@ a=$(cat .back)
 SAVEIFS=$IFS   # Save current IFS
 IFS=$'\n'      # Change IFS to new line
 a=($a) 
-for i in "${a[@]}" 
-do
-    cp -f .backup/$i/pack pack
-		cp -rf .backup/$i/output output
-		cp -r .backup/$i/emoji emoji 
-
-		if python3 bot.py 2> /dev/null
-		then
-			log "Pack $i $(cat pack) uploaded"
-			sed "/^$i$/d" .back > .back 
-    else
-			info "Please check network connection!!!" 1
+if [[ "$NOTIFY" == "" ]]
+then
+ (
+  TOTl=$(cat .back | wc -l )
+	count=1
+	for i in "${a[@]}" 
+	do 
+      cp -f .backup/$i/pack pack
+		  cp -rf .backup/$i/output output
+		  cp -r .backup/$i/emoji emoji 
+			echo "# Uploading ($count/$TOT1) $(cat pack)"
+			echo $(( $(( count - 1 )) * 100 / TOT))
+		  if python3 bot.py 2> /dev/null 
+		  then
+			  log "# Pack $i $(cat pack) uploaded"
+			  sed "/^$i$/d" .back > .lss 
+				mv .lss .back 
+      else
+			  info " Please check network connection!!!" 1
 			exit 1
-		fi
-		rm -rf .backup/$i 
-done
+		  fi
+			let "count=$count+1"
+		  rm -rf .backup/$i
+	 done 
+	 echo 100
+  ) | zenity --progress \
+				--title="Converting($conv/$TOT) $iii " \
+      --text="Downloading...." \
+      --percentage=0 \
+      --auto-close \
+      --auto-kill \
+	    --width=500 
+else
+	 for i in "${a[@]}" 
+   do
+      cp -f .backup/$i/pack pack
+		  cp -rf .backup/$i/output output
+		  cp -r .backup/$i/emoji emoji 
+
+		  if python3 bot.py 2> /dev/null
+		  then
+			  log "Pack $i $(cat pack) uploaded"
+			  sed "/^$i$/d" .back > .lss
+				mv .lss .back 
+      else
+			  info "Please check network connection!!!" 1
+			exit 1
+		  fi
+		  rm -rf .backup/$i
+		done 
+	fi
 echo "-------"
 info "All backups have been uploaded !!! Continuing?" 1 
 echo "-------"
@@ -316,7 +352,7 @@ do
 	   rm output.gif
 	fi 
 	log "----------------------"
-	printf "Avg Frame Delay = $totalloop \n Total Frame = $total \n Dividing total frame by = $counter \n Working on  = $file "
+	printf "Avg Frame Delay = $totalloop \n Total Frame = $total \n Dividing total frame by = $counter \n Working on  = $file \n"
 	log "# Converting gif !--! $file"
 	gifsicle -U $file  -d $totalloop  `seq -f "#%g" 0 $counter $total` -O9 --colors 255  -o output.gif  >/dev/null  2>&1
 	
@@ -348,6 +384,7 @@ else
   dobackup
   #cat pack >> not_uploaded
 fi
+echo "Cleaning up"
 rm -rf output
 }
 
@@ -367,7 +404,7 @@ if [[  -s .back ]];
 then
   if [[ "$NOTIFY" == "" ]] ;
   then
-       if zenity --question --text "Backup file found, Do you want to upload those stickers which are left out?" 
+       if zenity --question --text "Backup file found, Do you want to upload those stickers which are left out?" --width=400 --title="Sticker Pack Creator <3" 
 			 then
             installbak 
        fi
@@ -409,10 +446,11 @@ takein() {
 		if [[ "$INPUU" == "Choose file" ]]
 		then
 		   INPUU=$(zenity --file-selection )
-			 set -- "$INPUU" 
+			 FILE_I=$INPUU 
 		fi 
 		if [[ "$INPUU" == "" ]]
 		then
+			notify-send "Cancelling conversion"
 			exit 1
 		fi 
 	else
@@ -425,11 +463,10 @@ takein() {
 	fi 
 	  
 }
-takein 
-if [[ "$1" == "" ]] ;
+FILE_I=$1 
+takein $1  
+if [[ "$FILE_I" == "" ]] ;
 then
-#	post "Please input link to pack to be converted eg https://t.me/addstickers/HalloUtya" 
- # echo  $INPUU > pack
 	if [[ "$NOTIFY" == "" ]]
 	then
 		(
@@ -445,9 +482,9 @@ then
 		   dosingle 
   	fi
 else
-     TOT=$(cat $1 | wc -l )
+     TOT=$(cat $FILE_I | wc -l )
 		 conv=1 
-	   aaaa=$(cat $1)
+	   aaaa=$(cat $FILE_I)
      SAVEIFS=$IFS   # Save current IFS
      IFS=$'\n'      # Change IFS to new line
      aaaa=($aaaa)
