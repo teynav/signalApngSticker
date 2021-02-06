@@ -376,13 +376,19 @@ do
 	let "COUNTER=$COUNTER+1"
 	if [[ "$NOTIFY" == "" ]];
 	then
-		  echo $(( COUNTER * 100 / TOTALF ))
+		  a=$(( COUNTER * 100 / TOTALF ))
+			if [[ "$a" == "100" ]]
+			then
+				echo 99
+			else
+				echo $a
+			fi
 	fi 
 done
 rm *.tgs 
 rm *.gif
 #rm *.png 
-echo "Time to upload pack, conversion has been done!!!!"
+echo "# Time to upload pack!!!!"
 
 if python3 bot.py 2> /dev/null 
 then
@@ -454,7 +460,9 @@ takein() {
 		if [[ "$INPUU" == "Choose file" ]]
 		then
 		   INPUU=$(zenity --file-selection )
-			 FILE_I=$INPUU 
+			 FILE_I=$INPUU
+		else
+       echo $INPUU > pack 
 		fi 
 		if [[ "$INPUU" == "" ]]
 		then
@@ -477,8 +485,10 @@ if [[ "$FILE_I" == "" ]] ;
 then
 	if [[ "$NOTIFY" == "" ]]
 	then
+		echo "Got the pack from Zenity, not a file"
 		(
-	    dosingle 
+	    dosingle
+			echo 100 
 		) | zenity --progress \
   --title="Cooking APNG's" \
   --text="Downloading...." \
