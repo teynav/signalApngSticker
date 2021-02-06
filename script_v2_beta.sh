@@ -157,7 +157,12 @@ then
 		  cp -rf .backup/$i/output output
 		  cp -r .backup/$i/emoji emoji 
 			echo "# Uploading ($count/$TOTx) $(cat pack)"
-			echo $(( count * 100 / TOTx ))
+			x=$(( count * 100 / TOTx ))
+			if [[ "$x" == "100" ]]
+			then
+				x=99
+			fi 
+			echo $x 
 		  if python3 bot.py 2> /dev/null 
 		  then
 			  log "# Pack $i $(cat pack) uploaded"
@@ -174,7 +179,7 @@ then
 	 done 
 	 echo 100
   ) | zenity --progress \
-				--title="Converting($conv/$TOT) $iii " \
+				--title="Uploading Backups ..." \
       --text="Downloading...." \
       --percentage=0 \
       --auto-close \
@@ -445,7 +450,7 @@ fi
 takein() {
 	if [[ "$NOTIFY" == "" ]]
 	then
-		INPUU=$(zenity --text="Enter" --entry  --ok-label="Convert this" --extra-button="Choose file")
+		INPUU=$(zenity --text="Enter Link Here " --title="Sticker Pack Creator <3" --entry  --ok-label="Convert this" --extra-button="Choose file")
 		if [[ "$INPUU" == "Choose file" ]]
 		then
 		   INPUU=$(zenity --file-selection )
