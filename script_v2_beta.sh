@@ -235,7 +235,7 @@ fi
 #Output comes here 
 #install dep
 depi () {
-	if [ -f /usr/bin/apt ]
+	if command -v apt > /dev/null 
 	then 
 		log "Installing $1 for ubuntu"
 		if sudo apt install $1  ; 
@@ -244,7 +244,7 @@ depi () {
 		else
 			exit 
 		fi 
-	elif [ -f /usr/bin/pacman ] ;
+	elif command -v pacman > /dev/null 
 	then
 		log "Installing $1 for arch" 
      if sudo pacman -S $1  ; 
@@ -256,36 +256,78 @@ depi () {
 	else
 		log "Install $1 manually for now"
 	fi
+
+	if command -v $2 > /dev/null 
+	then 
+		log " "
+	else
+		log "Exiting because unable to install dependencies"
+	fi 
 }
 
-
+aur ()
+{
+	if command -v yay > /dev/null 
+	then
+		yay -S $1  
+	elif command -v pikaur > /dev/null
+	then
+		pikaur  -S $1  
+	elif command -v paru > /dev/null 
+	then 
+		paru -S $1 
+	else 
+		echo "Input name of your AUR-Helper Manually"
+		read aurh
+		if $aurh -S $1 > /dev/null 
+		then
+			log "Installed $1"
+		else 
+			log "Can't install this "
+			exit 1 
+		fi 
+	fi
+	if command -v $1 
+	then
+		log "Installed $1"
+	else
+		log "Couldn't install $1"
+		exit 1
+	fi 
+}
 #Check and ask to install dep 
 installdep () {
-	if [ -f /usr/bin/apngasm ] ;
+	if  command -v apngasm  > /dev/null 
 	then
 		log "apngasm is installed !!!!!!!!!!!!!"
 	else
-		log "Trying to install apnggasm"
-		depi apngasm  
+		log "Trying to install apngasm"
+		if command -v apt > /dev/null 
+		then
+			sudo apt install apngasm 
+		elif command -v pacman > /dev/null
+		then
+			aur apngasm-bin 
+		fi 
 	fi 
   
-	if [ -f /usr/bin/gifsicle ] ;
+	if  command -v gifsicle  > /dev/null 
 	then
 		log "Gifsicle is installed !!!!!!!!!!!!"
 	else
 		log "Trying to install gifsicle"
-		depi gifsicle 
+		depi gifsicle gifsicle 
 	fi 
 
-	if [ -f /usr/bin/convert ] ;
+	if  command -v convert  > /dev/null 
 	then
 		log "Imagemagick is installed !!!!!!!!"
 	else
 		log "Imagemagick is not installed, Trying to install it"
-		depi imagemagick 
+		depi imagemagick convert 
 	fi 
 		
-	if [ -f /usr/bin/tgs-to-gif ] ;
+	if  command -v tgs-to-gif  > /dev/null 
 	then
 		log "tgs-to-gif is installed !!!!!"
 	else 
@@ -293,8 +335,9 @@ installdep () {
     log "visit https://github.com/ed-asriyan/tgs-to-gif/tree/master-cpp" 
 	  exit 1 
 	fi 
+}
 
-} 
+
 dobackup() {
 	if [[ ! -d .backup ]];
 	then
