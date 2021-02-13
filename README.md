@@ -40,13 +40,13 @@ V2 Intial setup
 
 #### Don't share both of these with anyone else
 
-##### V2 of the script is handles uploading by it's own !!!!
+#### V2 of the script  handles uploading by it's own !!!!
 What does v2 of this script does?
 
 Asks you for stickerpack link of Telegram
-
 Gives you stickerpack link of Signal :")
 
+---
 For v2 you need just the link to stickerpack, __NO NEED TO DOWNLOAD TGS FILES__
 Just have links like "https://t.me/addstickers/HalloUtya" and that's enough !!!!
 
@@ -113,11 +113,10 @@ How do i do this? (For v1 )
 7. Create stickerpack using those apngs all are below 300kb !!!
 
 You say so, but what have you done??? 
-(some of these were done using giff-older which used gif from @StickerDownloadBot of telegram it had artifacts, newer script_v1.sh solves this issue where there were artifacts)
 
 ### With v2 porting becomes way easier since you don't have to be actively involved in porting
 
-[Contains 60+ stickerpack as of now ported from Telegram](https://signalstickers.com/?s=author%3A%22Navneet%20Vikram%20Tey%22)
+[Contains 80+ stickerpack as of now ported from Telegram](https://signalstickers.com/?s=author%3A%22Navneet%20Vikram%20Tey%22)
 
 
 Owwww, That's nice , How can I help you
