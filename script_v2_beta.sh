@@ -357,11 +357,62 @@ pydep () {
 	 fi 
 }
 tgsins(){
-	git clone https://github.com/ed-asriyan/tgs-to-gif && \
+	local a=""
+	local b=""
+	local c=""
+	local d=""
+	local e="x"
+	local f="x"
+	if command -v apt  > /dev/null
+	then
+		a="apt"
+		b="install"
+		c="python3-pip"
+		d="uninstall"
+	elif command -v pacman > /dev/null 
+	then
+		a="pacman"
+		b="-Syuu"
+		c="python-pip"
+		d="-Rsn"
+	fi 
+	if python -c "import conan" > /dev/null 2>&1 
+	then 
+		e=""
+	else
+		log "Install conan for having tgs-to-gif "
+		pyins $a $b $c conan 
+  fi 
+
+  if command -v cmake > /dev/null 
+	then
+		f=""
+	else
+		sudo $a $b cmake 
+	fi 
+
+	if command -v cmake > /dev/null 
+	then 
+	  git clone git@github.com:Samsung/rlottie.git && \
+    (cd rlottie && cmake CMakeLists.txt && make && sudo make install) && \
+    rm -fr rlottie
+	  git clone https://github.com/ed-asriyan/tgs-to-gif && \
 		( cd tgs-to-gif && git checkout master-cpp && conan install . --build && cmake CMakeLists.txt && make) && \
 		sudo mv tgs-to-gif/bin/tgs_to_gif /usr/bin/tgs-to-gif 2> /dev/null && \
 		sudo cp /usr/bin/tgs-to-gif /usr/bin/tgs2gif 2> /dev/null
-
+		echo "Cleaning up System deps"
+		if [[ "$e" == "x" ]];
+		then
+			sudo pip3 uninstall conan --no-input 
+		fi 
+		if [[ "$f" == "x" ]];
+		then 
+			sudo $a $d cmake 
+		fi 
+	else
+		log "Couldn't install cmake , exiting"
+		exit 1 
+	fi 
 }
 #Check and ask to install dep 
 installdep () {
