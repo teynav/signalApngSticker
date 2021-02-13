@@ -287,7 +287,7 @@ aur ()
 			exit 1 
 		fi 
 	fi
-	if command -v $1 
+	if command -v $2 
 	then
 		log "Installed $1"
 	else
@@ -299,7 +299,7 @@ aur ()
 installdep () {
 	if  command -v apngasm  > /dev/null 
 	then
-		log "apngasm is installed !!!!!!!!!!!!!"
+		echo -n ""
 	else
 		log "Trying to install apngasm"
 		if command -v apt > /dev/null 
@@ -307,13 +307,14 @@ installdep () {
 			sudo apt install apngasm 
 		elif command -v pacman > /dev/null
 		then
-			aur apngasm-bin 
+			aur apngasm-bin apngasm
 		fi 
 	fi 
   
 	if  command -v gifsicle  > /dev/null 
 	then
-		log "Gifsicle is installed !!!!!!!!!!!!"
+	#	log "Gifsicle is installed !!!!!!!!!!!!"
+	echo -n ""
 	else
 		log "Trying to install gifsicle"
 		depi gifsicle gifsicle 
@@ -321,7 +322,8 @@ installdep () {
 
 	if  command -v convert  > /dev/null 
 	then
-		log "Imagemagick is installed !!!!!!!!"
+		echo -n ""
+	#	log "Imagemagick is installed !!!!!!!!"
 	else
 		log "Imagemagick is not installed, Trying to install it"
 		depi imagemagick convert 
@@ -329,7 +331,8 @@ installdep () {
 		
 	if  command -v tgs-to-gif  > /dev/null 
 	then
-		log "tgs-to-gif is installed !!!!!"
+		echo -n "" 
+	#	log "tgs-to-gif is installed !!!!!"
 	else 
 		log "Not installed tgs to gif , Need to  take help of github here " 
     log "visit https://github.com/ed-asriyan/tgs-to-gif/tree/master-cpp" 
