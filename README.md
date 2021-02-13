@@ -8,21 +8,55 @@ to friends when you are back :")
 
 What do I need to run this program? Linux
 
-What do I need to install beforehand? Good question, Here's the list.
+If you are on Debian or Ubuntu or Arch (including their variants ) 
+You ==don't need to preinstall anything==, script will handle requirements when ran from
+CLI for first time. You will be prompted to input password to install them.
+
+If you want to run script by double clicking it , Install _zenity_ and _notify-send_ on your 
+distribution , it's totally optional since CLI works too.
+
+Are you on other Distributions? Get these beforehand !!!
 1. gifsicle 
 2. imagemagick 
 3. apngasm 
-4. [tgs-to-gif](https://github.com/ed-asriyan/tgs-to-gif/tree/master-cpp)
-5. zsh (soon to be replaced with bash)
-6. sudo pip install python-telegram-bot ( For v2 only )
-7. sudo pip install signalstickers-client ( For v2 only )
+4. python-pip (could be uninstalled after initial setup )
+5. cmake ( could be uninstalled after initial setup )
+6. (totally optional) zenity (for GUI)
+
+What would initial setup install ? 
+1. [tgs-to-gif](https://github.com/ed-asriyan/tgs-to-gif/tree/master-cpp)
+2. python-telegram-bot
+3. signalstickers-client 
 
 ---
-You can easily find these in your repo or AUR 
-With v2 you will be able to download these using script except for tgs-to-gif 
-For python requirements run pip commands 
+V2 Intial setup 
+1. Get Telegram Bot token ready
+2. Now open Signal Desktop 
+    - Goto Menu 
+		- Toggle Developers tools 
+		- On there open Console 
+		- Store somehwere output of window.reduxStore.getState().items.uuid_id 
+		- Also store outut of window.reduxStore.getState().items.password
 
----
+#### Don't share both of these with anyone else
+
+##### V2 of the script is handles uploading by it's own !!!!
+What does v2 of this script does?
+
+Asks you for stickerpack link of Telegram
+
+Gives you stickerpack link of Signal :")
+
+For v2 you need just the link to stickerpack, ==NO NEED TO DOWNLOAD TGS FILES==
+Just have links like "https://t.me/addstickers/HalloUtya" and that's enough !!!!
+
+For bot to upload on your behalf, using your account credentials given above.
+
+If you want telegram bot token get it using [BotFather](https://t.me/BotFather) :")
+
+Once Intial setup , from next time just sending link would be enough.
+
+--- 
 ### Usage of v2 script
 
 ```
@@ -33,23 +67,28 @@ For python requirements run pip commands
 Where file has list of Telegram sticker links
 
 ```
-## V2 of the script is handles uploading by it's own !!!!
-What does v2 of this script does?
 
-Does all mentioned tasks of v1 , and then make stickerpack , uploads it
-Give you stickerpack link :")
+Usage of v1 of script 
 
-For v2 you need just the link to stickerpack, NO NEED TO DOWNLOAD TGS FILES
-Just have "https://t.me/addstickers/HalloUtya" and that's enough !!!!
+```
+./script_v1.sh
 
-While setting up v2 for first time you might be asked some info for signalstickerpack-client script
-for bot to upload on your behalf, using your account credentials.
+Converts tgs in current diretory to apng within ./outut
+```
+You could use it to : 
 
-Also you will need to setup a telegram bot using [BotFather](https://t.me/BotFather) and get token of it :")
+1. To create custom stickerpack from group of tgs files
+2. You don't need to have telegram account , although you need source of tgs files
+Dependencies of v1 of script 
+1. gifsicle 
+2. imagemagick 
+3. apngasm 
+4. tgs-to-gif 
 
-Once done, from next time just sending link would be enough.
+Prefer v2 since it does job automated.
 
 ---
+
 
 What do this script do? (Just v1 )
 1. Convert tgs to gif
