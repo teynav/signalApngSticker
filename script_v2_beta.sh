@@ -356,6 +356,13 @@ pydep () {
 		 pyins $a $b $c signalstickers-client
 	 fi 
 }
+tgsins(){
+	git clone https://github.com/ed-asriyan/tgs-to-gif && \
+		( cd tgs-to-gif && git checkout master-cpp && conan install . --build && cmake CMakeLists.txt && make) && \
+		sudo mv tgs-to-gif/bin/tgs_to_gif /usr/bin/tgs-to-gif 2> /dev/null && \
+		sudo cp /usr/bin/tgs-to-gif /usr/bin/tgs2gif 2> /dev/null
+
+}
 #Check and ask to install dep 
 installdep () {
 	if  command -v apngasm  > /dev/null 
