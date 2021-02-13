@@ -363,7 +363,7 @@ tgsins(){
 	local d=""
 	local e="x"
 	local f="x"
-	if command -v apt  > /dev/null
+ 	if command -v apt  > /dev/null
 	then
 		a="apt"
 		b="install"
@@ -388,8 +388,15 @@ tgsins(){
 	then
 		f=""
 	else
+		if [[ "$a" == "" ]];
+		then
+			echo "Please install cmake"
+			exit 1 
+		fi 
+
 		sudo $a $b cmake 
 	fi 
+
 
 	if command -v cmake > /dev/null 
 	then 
@@ -453,9 +460,12 @@ installdep () {
 		echo -n "" 
 	#	log "tgs-to-gif is installed !!!!!"
 	else 
-		log "Not installed tgs to gif , Need to  take help of github here " 
-    log "visit https://github.com/ed-asriyan/tgs-to-gif/tree/master-cpp" 
-	  exit 1 
+		if command -v pacman > /dev/null 
+		then 
+			aur tgs-to-gif-cpp-git tgs-to-gif 
+		else 
+         tgsins 
+		fi 
 	fi
 	pydep 
 }
