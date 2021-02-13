@@ -9,7 +9,7 @@ to friends when you are back :")
 What do I need to run this program? Linux
 
 If you are on Debian or Ubuntu or Arch (including their variants ) 
-You ==don't need to preinstall anything==, script will handle requirements when ran from
+You __don't need to preinstall anything__, script will handle requirements when ran from
 CLI for first time. You will be prompted to input password to install them.
 
 If you want to run script by double clicking it , Install _zenity_ and _notify-send_ on your 
@@ -47,7 +47,7 @@ Asks you for stickerpack link of Telegram
 
 Gives you stickerpack link of Signal :")
 
-For v2 you need just the link to stickerpack, ==NO NEED TO DOWNLOAD TGS FILES==
+For v2 you need just the link to stickerpack, __NO NEED TO DOWNLOAD TGS FILES__
 Just have links like "https://t.me/addstickers/HalloUtya" and that's enough !!!!
 
 For bot to upload on your behalf, using your account credentials given above.
