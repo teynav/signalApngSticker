@@ -287,13 +287,74 @@ aur ()
 			exit 1 
 		fi 
 	fi
-	if command -v $2 
+	if command -v $2 > /dev/null 
 	then
 		log "Installed $1"
 	else
 		log "Couldn't install $1"
 		exit 1
 	fi 
+}
+pyins () {
+
+if command -v pip3 > /dev/null 
+ then 
+   if sudo pip3 install $4 --no-input 
+	 then 
+     echo -n ""
+	 else
+		 log "Check internet Connection !! "
+		 exit 1
+	 fi 
+ else
+   if [[ "$1" == "" ]];
+   then
+	   log "Please install python-pip on your system"
+   exit 1
+   fi
+	 if [[ "$2" == "aa" ]];
+	 then
+		 log "Couldn't install python-pip on your system"
+		 exit 1
+	 fi
+	if  sudo $1 $2 $3 
+	then
+		pyins $1 aa $3 $4 
+	else
+    exit 1 
+	fi 
+fi
+}
+pydep () {
+	log "Checking python dependencies"
+	local a=""
+	local b=""
+	local c=""
+	if command -v apt  > /dev/null
+	then
+		a="apt"
+		b="install"
+		c="python3-pip"
+	elif command -v pacman > /dev/null 
+	then
+		a="pacman"
+		b="-Syuu"
+		c="python-pip"
+	fi 
+	if python -m "telegram" > /dev/null 2>&1 
+	then 
+		echo -n ""
+	else
+		log "Install python telegram bot"
+		pyins $a $b $c python-telegram-bot 
+   fi 
+	 if python -c "import signalstickers_client" > /dev/null 2>&1 
+	 then
+		 echo -n ""
+	 else
+		 log "Install SignalStickers Client"
+		 pyins $a $b $c signalstickers-client
+	 fi 
 }
 #Check and ask to install dep 
 installdep () {
@@ -337,7 +398,8 @@ installdep () {
 		log "Not installed tgs to gif , Need to  take help of github here " 
     log "visit https://github.com/ed-asriyan/tgs-to-gif/tree/master-cpp" 
 	  exit 1 
-	fi 
+	fi
+	pydep 
 }
 
 
