@@ -47,6 +47,26 @@ Asks you for stickerpack link of Telegram
 Gives you stickerpack link of Signal :")
 
 ---
+
+#### What if My stickerpack failed to upload? (Network issues etc)
+Don't you worry, got you there. Just run the command again and it would
+ask to upload packs not uploaded before due to network issues etc.
+
+You can choose to restore/upload backups created or convert a new stickerpack to signal 
+
+Can be done using both CLI and GUI 
+
+Once those are uploaded they would be deleted from hard drive.
+
+#### How to see what all packs i converted with this script ?
+
+```
+cat packs
+
+```
+
+#### Background 
+
 For v2 you need just the link to stickerpack, __NO NEED TO DOWNLOAD TGS FILES__
 Just have links like "https://t.me/addstickers/HalloUtya" and that's enough !!!!
 
