@@ -18,7 +18,7 @@ FRAMES=$(echo "$TGS_INFO" | awk -F'[ ,=]' '{print $5}')
 _FPS=$(echo "$TGS_INFO" | awk -F'[ ,=]' '{print $8}')
 DURATION=$(echo "$TGS_INFO" | awk -F'[ ,=]' '{print $11}' | sed "s/s//g")
 
-echo "Working on file $thefile \nTotal Frames $FRAMES at rate $_FPS , hence total duration $DURATION s"
+printf "Working on file $thefile \n Total Frames $FRAMES at rate $_FPS , hence total duration $DURATION s"
 
 for  (( frame=0 ; frame<$FRAMES; frame++  )) ; 
 do
@@ -53,11 +53,11 @@ mv $thedir/output_strip.1.2.png $thedir/output_final.png
 rm -rf $thedir/final 
 mkdir $thedir/final 
 
-convert  -crop 512x512 $thedir/output_final.png  $thedir/final/this.png
+convert  -crop 512x512 $thedir/output_final.png  $thedir/final/this.png 
 
 for file in $thedir/final/*.png 
 do 
-      ( optipng -o4 $file > /dev/null && convert -quality 85 $file $file > /dev/null ) &
+      ( optipng -o4 $file > /dev/null 2>&1 && convert -quality 85 $file $file > /dev/null  2>&1 ) &
 done
 wait
 for (( i=0 ; i<10 ; i++ )) ;
@@ -75,14 +75,17 @@ a=$(du $testf | sed -e "s/\s.*png//")
 if [ $a -gt "300" ];
 then
      rm -rf $thedir/output*
+     rm -rf $testf
      echo "Repeating with lower FPS 20>15>10>8"
+     printf "\n"
      return 1
 else
     mv $testf result/$(echo $thefile | sed "s/tgs/png/g")
-    #rm $testf
-    #rm $thedir
+    rm -rf $testf
+    rm -rf $thedir
+    printf "\n\n\n"
 fi
 
 }
 
-dothis 20 || dothis 15 || dothis 10 || dothis 8 || echo "File $thefile has been failed to be made smaller"
+dothis 20 || dothis 15 || dothis 10 || dothis 8 || dothis 6 ||  echo "File $thefile has been failed to be made smaller"

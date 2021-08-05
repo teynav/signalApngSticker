@@ -226,7 +226,6 @@ for i in "${a[@]}"
 		  rm -rf .backup/$i
 			rm result
 		done 
-	fi
 echo "-------"
 info "All backups have been uploaded !!! Continuing?" 1 
 echo "-------"
@@ -360,7 +359,7 @@ wait
 getpack() {
       if python3 download.py 2> /dev/null 
 	    then
-         maininstall
+         echo "Downloaded it all "
 		  else
 				info "Can't download pack $(cat pack)"
 			   cat pack >> not_uploaded 
@@ -452,6 +451,10 @@ takein() {
 	fi 
 }
 
+takein 
+
+
+# Check for other flags
 
 if [[ $1 == "--convert" ]]
 then 
@@ -468,7 +471,8 @@ if [[ "$FILE_I" == "" ]] ;
 then
 		 getpack 
 		 porter 
-		 uploader 
+		 uploader
+		 rm *.tgs
 else
      TOT=$(cat $FILE_I | wc -l )
 		 conv=1 
@@ -485,6 +489,7 @@ else
 		    getpack 
         porter
 				uploader 
+				rm *.tgs 
 		 let "conv=$conv+1"
 	   done
 fi

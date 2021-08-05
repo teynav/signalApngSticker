@@ -4,7 +4,7 @@ And uploads it while you grab a coffee and makes sure you have it to send it
 to friends when you are back :")
 
 ---
-## Welcome :")
+## Welcome v3 here (beta right now) :")
 
 What do I need to run this program? Linux
 
@@ -12,24 +12,22 @@ If you are on Debian or Ubuntu or Arch (including their variants )
 You __don't need to preinstall anything__, script will handle requirements when ran from
 CLI for first time. You will be prompted to input password to install them.
 
-If you want to run script by double clicking it , Install _zenity_ and _notify-send_ on your 
-distribution , it's totally optional since CLI works too.
-
 Are you on other Distributions? Get these beforehand !!!
-1. gifsicle (May be removed soon )
+1. apng-utils ( apngasm apngdis)
 2. imagemagick 
-3. apngasm < 3.x supported
+3. pngquant 
 4. python-pip (could be uninstalled after initial setup )
-5. cmake ( could be uninstalled after initial setup )
-6. (totally optional) zenity (for GUI)
+5. pngnq-s9 
+6. optipng 
+7. (totally optional) zenity (for GUI) (v2 only) 
 
 What would initial setup install ? 
-1. [tgs-to-gif](https://github.com/ed-asriyan/tgs-to-gif/tree/master-cpp) (May be removed soon)
-2. python-telegram-bot
-3. signalstickers-client 
+1. python-telegram-bot
+2. signalstickers-client
+3. Dependencies uninstalled if you are in ARCH and/or UBUNTU 
 
 ---
-V2 Intial setup 
+V3 as well as V2  Intial setup 
 1. Get Telegram Bot token ready
 2. Now open Signal Desktop 
     - Goto Menu 
@@ -40,7 +38,7 @@ V2 Intial setup
 
 #### Don't share both of these with anyone else
 
-#### V2 of the script  handles uploading by it's own !!!!
+#### V3 and V2 of the script  handles uploading by it's own !!!!
 What does v2 of this script does?
 
 Asks you for stickerpack link of Telegram
@@ -67,7 +65,7 @@ cat packs
 
 #### Background 
 
-For v2 you need just the link to stickerpack, __NO NEED TO DOWNLOAD TGS FILES__
+For v3 and v2 you need just the link to stickerpack, __NO NEED TO DOWNLOAD TGS FILES__
 Just have links like "https://t.me/addstickers/HalloUtya" and that's enough !!!!
 
 For bot to upload on your behalf, using your account credentials given above.
@@ -77,17 +75,17 @@ If you want telegram bot token get it using [BotFather](https://t.me/BotFather) 
 Once Intial setup , from next time just sending link would be enough.
 
 --- 
-### Usage of v2 script
+### Usage of v3 script  (and v2 change name)
 
 ```
-./script_v2_beta.sh 
+./script_v3_beta.sh 
 
-./script_v2_beta.sh <filename>
+./script_v3_beta.sh <filename>
 
 Where file has list of Telegram sticker links
 
 ```
-
+<details><summary> Internal working of v1 and v2 </summary>
 Usage of v1 of script 
 
 ```
@@ -135,7 +133,7 @@ How do i do this? (For v1 )
 You say so, but what have you done??? 
 
 ### With v2 porting becomes way easier since you don't have to be actively involved in porting
-
+</details>
 [Contains 80+ stickerpack as of now ported from Telegram](https://signalstickers.com/?s=author%3A%22Navneet%20Vikram%20Tey%22)
 
 
