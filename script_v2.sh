@@ -111,7 +111,7 @@ workplz()
 	then
 	  rm tmp.png  
 	fi 
-	apngasm tmp.png $(ls filepng* | tr '\n' ' ') -z0 > /dev/null 
+	apngasm -o tmp.png $(ls filepng* | tr '\n' ' ') > /dev/null 
         workplz tmp.png 
 }
 
@@ -433,7 +433,7 @@ installdep () {
 			sudo apt install apngasm 
 		elif command -v pacman > /dev/null
 		then
-			aur apngasm-bin apngasm
+			aur apng-utils apngasm
 		fi 
 	fi 
   
@@ -545,7 +545,7 @@ do
 	newf=$(echo $file1 | sed -e "s/\.gif/\.png/g" ) 
 	
 	echo "# Making apng of $file"
-	apngasm $newf filepng*  > /dev/null 
+	apngasm -o $newf filepng*  > /dev/null 
 	workplz $newf 
 	mv tmp.png ./output/$finalfilename
 	rm filepng*
