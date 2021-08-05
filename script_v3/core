@@ -1,0 +1,88 @@
+#!/bin/bash 
+
+thefile=$2
+thedir="testdir/$1"
+rm -rf $thedir 
+mkdir $thedir
+RES=512
+
+# Tgs is gunzipped rllotie file
+
+gunzip -c "$thefile" > $thedir/"$thefile".json
+
+TGS_INFO=$(tgs2png -i $thedir/"$thefile".json ) || exit 1
+
+mkdir $thedir/frame
+
+FRAMES=$(echo "$TGS_INFO" | awk -F'[ ,=]' '{print $5}')
+_FPS=$(echo "$TGS_INFO" | awk -F'[ ,=]' '{print $8}')
+DURATION=$(echo "$TGS_INFO" | awk -F'[ ,=]' '{print $11}' | sed "s/s//g")
+
+echo "Working on file $thefile \nTotal Frames $FRAMES at rate $_FPS , hence total duration $DURATION s"
+
+for  (( frame=0 ; frame<$FRAMES; frame++  )) ; 
+do
+      f=$(( $frame+1 ))
+      tgs2png -s $(( $RES*4 ))x0 -o $frame -n 1 "$thedir/$thefile.json"  > "$thedir/frame/$f.png" &
+done
+wait
+
+
+dothis () {
+
+ffmpeg -r $_FPS -i "$thedir/frame/%d.png" -vcodec apng -vf scale=$RES:-1:flags=neighbor:sws_dither=none -r $1 -plays 0 "$thedir/output.apng" &>/dev/null
+
+
+#Now causing a strip to form 
+
+apngdis $thedir/output.apng -s > /dev/null 
+
+#Now optimizing it 
+
+pngnq-s9 -L -Qn -T15 -n90 -e '.1.png' "$thedir/output_strip.png"
+
+#More optimization 
+
+pngquant --nofs --quality 85 --strip --ext '.2.png' "$thedir/output_strip.1.png"
+
+
+#ffmpeg -r $_FPS -i "output_strip.1.2.png" -vcodec png -vf scale=512:-1:flags=area:sws_dither=none -pix_fmt rgba -y "output_final.png"
+
+mv $thedir/output_strip.1.2.png $thedir/output_final.png
+
+rm -rf $thedir/final 
+mkdir $thedir/final 
+
+convert  -crop 512x512 $thedir/output_final.png  $thedir/final/this.png
+
+for file in $thedir/final/*.png 
+do 
+      ( optipng -o4 $file > /dev/null && convert -quality 85 $file $file > /dev/null ) &
+done
+wait
+for (( i=0 ; i<10 ; i++ )) ;
+do
+      mv $thedir/final/this-$i.png $thedir/final/this-0$i.png 
+done
+echo $DURATION is duration  for $totalfiles files 
+delayatend=$(python -c "print(round(1000/$1))")
+echo Putting delay for each at $delayatend 
+echo Completed optimiation !
+testf=$(uuidgen)".png"
+apngasm  -F -d $delayatend -o $testf  $thedir/final/* > /dev/null 
+
+a=$(du $testf | sed -e "s/\s.*png//")
+if [ $a -gt "300" ];
+then
+     rm -rf $thedir/output*
+     echo "Repeating with lower FPS 20>15>10>8"
+     return 1
+else
+    mv $testf result/$(echo $thefile | sed "s/tgs/png/g")
+    #rm $testf
+    #rm $thedir
+fi
+
+}
+
+dothis 20 || dothis 15 || dothis 10 || dothis 8 || echo "File $thefile has been failed to be made smaller"
