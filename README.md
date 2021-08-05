@@ -16,15 +16,15 @@ If you want to run script by double clicking it , Install _zenity_ and _notify-s
 distribution , it's totally optional since CLI works too.
 
 Are you on other Distributions? Get these beforehand !!!
-1. gifsicle 
+1. gifsicle (May be removed soon )
 2. imagemagick 
-3. apngasm 
+3. apngasm < 3.x supported
 4. python-pip (could be uninstalled after initial setup )
 5. cmake ( could be uninstalled after initial setup )
 6. (totally optional) zenity (for GUI)
 
 What would initial setup install ? 
-1. [tgs-to-gif](https://github.com/ed-asriyan/tgs-to-gif/tree/master-cpp)
+1. [tgs-to-gif](https://github.com/ed-asriyan/tgs-to-gif/tree/master-cpp) (May be removed soon)
 2. python-telegram-bot
 3. signalstickers-client 
 
@@ -141,5 +141,5 @@ You say so, but what have you done???
 
 Owwww, That's nice , How can I help you
 1. Suggestions , Signal +919519873721
-2. Donations , [PayPal](https://www.paypal.com/paypalme/my/profile) or UPI 9519873721@ybl 
+2. Donations , [PayPal](https://paypal.me/TalentedTey?locale.x=en_GB) or UPI 9519873721@ybl 
 3. If you are using brave you can donate me directly.
