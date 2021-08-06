@@ -344,12 +344,18 @@ then
 fi
 
 rm -rf testdir
-mkdir testdir
-
+mkdir testdir 
 for file in ./*.tgs 
 do
+  jobbb=`jobs | wc -l`
+	while [[ $jobbb -ge "3" ]]
+  do
+		#echo "Total jobs = $(jobs | wc -l )"
+    sleep 5
+		jobbb=`jobs | wc -l`
+  done 
 	batch=$(echo $file | sed "s/.tgs//g")
-  ./core $batch $file 
+	./core.new $batch $file &
 done 
 wait 
 
@@ -362,7 +368,8 @@ getpack() {
          echo "Downloaded it all "
 		  else
 				info "Can't download pack $(cat pack)"
-			   cat pack >> not_uploaded 
+			   cat pack >> not_uploaded
+				 exit 1
 		  fi
 }
 

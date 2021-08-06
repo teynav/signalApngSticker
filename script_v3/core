@@ -23,6 +23,11 @@ printf "Working on file $thefile \n Total Frames $FRAMES at rate $_FPS , hence t
 for  (( frame=0 ; frame<$FRAMES; frame++  )) ; 
 do
       f=$(( $frame+1 ))
+      shouldwait=$(python -c "print($f%3)")
+      if [[ $shouldwait == 0 ]] 
+      then
+        wait 
+      fi 
       tgs2png -s $(( $RES*4 ))x0 -o $frame -n 1 "$thedir/$thefile.json"  > "$thedir/frame/$f.png" &
 done
 wait
@@ -54,10 +59,16 @@ rm -rf $thedir/final
 mkdir $thedir/final 
 
 convert  -crop 512x512 $thedir/output_final.png  $thedir/final/this.png 
-
+ff=1
 for file in $thedir/final/*.png 
 do 
+      shouldwait=$(python -c "print($ff%5)")
+      if [[ $shouldwait == 0 ]] 
+      then
+        wait 
+      fi 
       ( optipng -o4 $file > /dev/null 2>&1 && convert -quality 85 $file $file > /dev/null  2>&1 ) &
+      ff=$(( $ff+1 ))
 done
 wait
 for (( i=0 ; i<10 ; i++ )) ;
@@ -88,4 +99,4 @@ fi
 
 }
 
-dothis 20 || dothis 15 || dothis 10 || dothis 8 || dothis 6 ||  echo "File $thefile has been failed to be made smaller"
+dothis 20 || dothis 15 || dothis 10 || dothis 8 || dothis 6 || dothis 4 ||  echo "File $thefile has been failed to be made smaller"
