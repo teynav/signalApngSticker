@@ -355,7 +355,7 @@ do
 		jobbb=`jobs | wc -l`
   done 
 	batch=$(echo $file | sed "s/.tgs//g")
-	./core.new $batch $file &
+	./core-fps $batch $file &
 done 
 wait 
 
