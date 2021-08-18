@@ -210,6 +210,7 @@ a=($a)
 ee=$$
 for i in "${a[@]}" 
    do
+		  rm -rf result
       cp -f .backup/$i/pack pack
 		  cp -rf .backup/$i/result result
 		  cp -r .backup/$i/emoji emoji 
@@ -224,7 +225,7 @@ for i in "${a[@]}"
 			exit 1
 		  fi
 		  rm -rf .backup/$i
-			rm result
+			rm -rf result
 		done 
 echo "-------"
 info "All backups have been uploaded !!! Continuing?" 1 
@@ -355,7 +356,7 @@ do
 		jobbb=`jobs | wc -l`
   done 
 	batch=$(echo $file | sed "s/.tgs//g")
-	./core-fps $batch $file &
+	./core-hybrid $batch $file &
 done 
 wait 
 

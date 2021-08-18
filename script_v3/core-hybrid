@@ -3,31 +3,63 @@
 thefile=$2
 thedir="testdir/$1"
 rm -rf $thedir 
-mkdir $thedir
-RES=275 
+mkdir $thedir 
 FILE=""
 #DEFAULTR="225x225"
 goneu=""
-GFRAMES=20 
+
+RES=375
+GFRAMES=18
+TFRAME=20
+doframeup=2
+
 findthis () {
-  a=("512" "400" "350" "300" "275" "250" "225")
-   for (( i=0 ; i<7;i++ ))
+  a=("512" "450" "400" "375" "350" "325" "300" "275" "250" "225")
+  doingscale=$(python -c "print($doframeup%3)")  
+  for (( i=0 ; i<10;i++ ))
    do 
+
      if [[ $RES == ${a[$i]} ]]
      then
-       RES=${a[$(( $i+$1 ))]}
-       DEFAULTR=$RES"x"$RES
-       return 
+      # echo  "MATCHING $doingscale with $1 "
+         if [[ "$doingscale" -ne "0" && "$1" -eq "-1" ]]
+         then
+            GFRAMES=$(( $GFRAMES+1 ))
+            if [[ "$GFRAMES" -eq  "21" ]]
+            then
+                GFRAMES=20
+                RES=${a[$(( $i+$1 ))]}
+            fi 
+         elif [[ "$doingscale" -ne "0" && "$1" -eq "1" ]]
+         then
+            RES=${a[$(( $i+$1 ))]}
+         elif [[ "$doingscale" -eq "0" && "$1" -eq "1" ]]
+         then
+            GFRAMES=$(( $GFRAMES-1 ))
+            if [[ "$GFRAMES" -eq  "14" ]]
+            then
+                GFRAMES=15
+                RES=${a[$(( $i+$1 ))]}
+            fi 
+         else
+            RES=${a[$(( $i+$1 ))]}
+         fi
+       break 
      fi
    done
+   doframeup=$(( $doframeup+1 ))
+     if [[ $RES == "" ]] 
+   then
+     RES="225"
+   fi 
 }
 todo()
 {
   if [[ $FILE != "" ]];
   then
-    findthis -1 
+    findthis "-1" 
   else
-    findthis 1
+    findthis "1"
   fi 
 }
 
@@ -45,13 +77,12 @@ printf "Working on file $thefile \n Total Frames $FRAMES at rate $_FPS , hence t
 
 dothis () {
 rm -rf $thedir/output*
-
 DEFAULTR="$RES"x"$RES"
 rm -rf $thedir/frame 
 mkdir $thedir/frame
 #echo $RES
 #echo $DEFAULTR
-
+echo "Working at $RES at frames $GFRAMES"
 for  (( frame=0 ; frame<$FRAMES; frame++  )) ; 
 do
       f=$(( $frame+1 ))
@@ -122,7 +153,7 @@ then
         then
           if [[ $GFRAMES -gt "15" ]]
           then
-            GFRAMES=$(( $GFRAMES-1 ))
+             GFRAMES=$(( $GFRAMES-1 ))
              rm -rf $thedir/output*
              rm -rf $testf
              echo "Forced to lower frame rate=$GFRAMES otherwise quality would suffer check $thefile !"
@@ -133,7 +164,7 @@ then
              exit 1
           fi
         fi 
-       # echo "Repeating with lower Resolution"
+     # echo "Repeating with lower Resolution"
         rm -rf $thedir/output*
         rm -rf $testf
         printf "\n"
@@ -156,11 +187,12 @@ else
       rm -rf $thedir/output*
       if [[ $goneu == "x" ]] 
       then
-        mv $testf result/$(echo $thefile | sed "s/tgs/png/g")
-        rm -rf $testf
-        rm -rf $thedir
-        printf "\n\n\n"
-        return 0
+     #   mv $testf result/$(echo $thefile | sed "s/tgs/png/g")
+      #  rm -rf $testf
+       # rm -rf $thedir
+        #printf "\n\n\n"
+        #return 0
+        doframeup=1 
       fi
       todo
       dothis 
