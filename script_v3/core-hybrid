@@ -115,7 +115,6 @@ pngquant --nofs --quality 85 --strip --ext '.2.png' "$thedir/output_strip.1.png"
 #ffmpeg -r $_FPS -i "output_strip.1.2.png" -vcodec png -vf scale=512:-1:flags=area:sws_dither=none -pix_fmt rgba -y "output_final.png"
 
 mv $thedir/output_strip.1.2.png $thedir/output_final.png
-
 rm -rf $thedir/final 
 mkdir $thedir/final 
 
@@ -145,7 +144,7 @@ testf=$(uuidgen)".png"
 apngasm  -F -d $delayatend -o $testf  $thedir/final/* > /dev/null 
 
 a=$(du $testf | sed -e "s/\s.*png//")
-if [ $a -gt "300" ];
+if [ $a -gt "299" ];
 then
      if [[ $FILE == "" ]]
      then

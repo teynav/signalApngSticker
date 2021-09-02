@@ -459,7 +459,7 @@ takein() {
 	fi 
 }
 
-takein 
+takein $1 
 
 
 # Check for other flags
