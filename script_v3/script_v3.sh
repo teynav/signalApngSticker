@@ -417,7 +417,7 @@ then
             installbak 
        fi
 	else
-		echo  "Backup file found, Do you want to upload those stickers which are left out? (N/y)"
+		echo  "Backup file found, Do you want to upload those stickers which are left out? (N/y/d)"
     read xxx 
 		if [[ "$xxx" == "y" ]];
 		then 
@@ -425,7 +425,13 @@ then
 		elif [[ "$xxx" == "Y" ]];
 		then
 			installbak
-		else
+		elif [[ "$xxx" == "d" ]];
+		then
+                 # log "Deleting backup files"
+                  rm -rf .backup
+                  rm -rf .back
+                  log "Deleted backup files"
+                else
 			log "Skipped backup"
 		fi
 	fi

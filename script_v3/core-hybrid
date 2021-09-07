@@ -73,7 +73,7 @@ FRAMES=$(echo "$TGS_INFO" | awk -F'[ ,=]' '{print $5}')
 _FPS=$(echo "$TGS_INFO" | awk -F'[ ,=]' '{print $8}')
 DURATION=$(echo "$TGS_INFO" | awk -F'[ ,=]' '{print $11}' | sed "s/s//g")
 
-printf "Working on file $thefile \n Total Frames $FRAMES at rate $_FPS , hence total duration $DURATION s\n"
+printf "Working on file $thefile \nTotal Frames $FRAMES at rate $_FPS , hence total duration $DURATION s\n"
 
 dothis () {
 rm -rf $thedir/output*
@@ -82,7 +82,7 @@ rm -rf $thedir/frame
 mkdir $thedir/frame
 #echo $RES
 #echo $DEFAULTR
-echo "Working at $RES at frames $GFRAMES"
+echo "Working at $RES at frames $GFRAMES in $thefile"
 for  (( frame=0 ; frame<$FRAMES; frame++  )) ; 
 do
       f=$(( $frame+1 ))
@@ -166,7 +166,7 @@ then
      # echo "Repeating with lower Resolution"
         rm -rf $thedir/output*
         rm -rf $testf
-        printf "\n"
+        #printf "\n"
         goneu="x"
         todo
         dothis
@@ -175,7 +175,7 @@ then
         mv $FILE result/$(echo $thefile | sed "s/tgs/png/g")
         rm -rf $testf
         rm -rf $thedir
-        printf "\n\n\n"
+        printf "\nCompleted working on $thefile/n"
         return 0
      fi 
      return 1
@@ -204,7 +204,7 @@ else
         mv $testf result/$(echo $thefile | sed "s/tgs/png/g")
         rm -rf $testf
         rm -rf $thedir
-        printf "\n\n\n"
+        printf "\nCompleted working on $thefile/n"
         return 0
       else
         rm -rf $thedir/output*
