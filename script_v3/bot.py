@@ -37,7 +37,7 @@ async def main():
     bot= Bot(token)
     sticker_set = bot.getStickerSet(sticker_name)
     length=len(sticker_set.stickers)
-    chunk=60
+    chunk=100
     totalloop=math.ceil(length/chunk)
     doneloop=0
     while totalloop-doneloop > 0 :
