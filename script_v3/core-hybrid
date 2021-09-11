@@ -36,9 +36,9 @@ findthis () {
          elif [[ "$doingscale" -eq "0" && "$1" -eq "1" ]]
          then
             GFRAMES=$(( $GFRAMES-1 ))
-            if [[ "$GFRAMES" -eq  "14" ]]
+            if [[ "$GFRAMES" -eq  "11" ]]
             then
-                GFRAMES=15
+                GFRAMES=12
                 RES=${a[$(( $i+$1 ))]}
             fi 
          else
@@ -151,7 +151,7 @@ then
      then
         if [[ $RES == "225" ]]
         then
-          if [[ $GFRAMES -gt "15" ]]
+          if [[ $GFRAMES -gt "12" ]]
           then
              GFRAMES=$(( $GFRAMES-1 ))
              rm -rf $thedir/output*
