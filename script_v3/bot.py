@@ -46,7 +46,7 @@ async def main():
         pack.title = give_name(sticker_set.name, totalloop , doneloop)
         ww=chunk*doneloop
         i=0
-        while i < 60:
+        while i < chunk:
             totalfile=(chunk*doneloop)+i
             if totalfile == length :
                 break
