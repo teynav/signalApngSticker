@@ -117,7 +117,8 @@ pngquant --nofs --quality 85 --strip --ext '.2.png' "$thedir/output_strip.1.png"
 mv $thedir/output_strip.1.2.png $thedir/output_final.png
 rm -rf $thedir/final 
 mkdir $thedir/final 
-
+isresdiff=$(identify $thedir/output.apng | sed "s/^.*PNG //g" | sed "s/ .*//g")
+DEFAULTR=$isresdiff
 convert  -crop $DEFAULTR $thedir/output_final.png  $thedir/final/this.png 
 ff=0
 for file in $thedir/final/*.png 
