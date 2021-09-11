@@ -134,6 +134,7 @@ You say so, but what have you done???
 
 ### With v2 porting becomes way easier since you don't have to be actively involved in porting
 </details>
+
 [Contains 80+ stickerpack as of now ported from Telegram](https://signalstickers.com/?s=author%3A%22Navneet%20Vikram%20Tey%22)
 
 

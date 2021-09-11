@@ -175,7 +175,7 @@ then
         mv $FILE result/$(echo $thefile | sed "s/tgs/png/g")
         rm -rf $testf
         rm -rf $thedir
-        printf "\nCompleted working on $thefile/n"
+        printf "\nCompleted working on $thefile\n"
         return 0
      fi 
      return 1
@@ -204,7 +204,7 @@ else
         mv $testf result/$(echo $thefile | sed "s/tgs/png/g")
         rm -rf $testf
         rm -rf $thedir
-        printf "\nCompleted working on $thefile/n"
+        printf "\nCompleted working on $thefile\n"
         return 0
       else
         rm -rf $thedir/output*
