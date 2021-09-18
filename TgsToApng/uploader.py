@@ -4,8 +4,6 @@ import anyio
 import sys
 from signalstickers_client import StickersClient
 from signalstickers_client.models import LocalStickerPack, Sticker
-from telegram import Update, Bot
-from telegram.ext import Updater, CommandHandler, CallbackContext
 async def main():
     def add_sticker(path, emoji):
 
