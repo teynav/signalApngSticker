@@ -137,8 +137,8 @@ do
       mv $thedir/final/this-$i.png $thedir/final/this-0$i.png 
 done
 #echo $DURATION is duration  for $totalfiles files 
-#delayatend=$(python -c "print(round(1000/$1))")
-delayatend=50 
+delayatend=$(python -c "print(round(1000/$GFRAMES))")
+#delayatend=50
 #echo Putting delay for each at $delayatend 
 #echo Completed optimiation !
 testf=$(uuidgen)".png"
