@@ -4,21 +4,30 @@ And uploads it while you grab a coffee and makes sure you have it to send it
 to friends when you are back :")
 
 ---
-## Welcome Rust program(Alpha) and Script v3(Linux only) are here :")
+## Welcome v3 here (beta right now) :")
 
-What do I need to run this program? Linux , Windows (only for Rust program)
+What do I need to run this program? Linux
 
-Look for Script folder on details about script
+If you are on Debian or Ubuntu or Arch (including their variants ) 
+You __don't need to preinstall anything__, script will handle requirements when ran from
+CLI for first time. You will be prompted to input password to install them.
 
-For Rust program , you would need 
-1. Apngasm
-2. Tgs2Png
-3. Ffmpeg
-4. Python for singalstickers_client in uploader.py
+Are you on other Distributions? Get these beforehand !!!
+1. apng-utils ( apngasm apngdis)
+2. imagemagick 
+3. pngquant 
+4. python-pip (could be uninstalled after initial setup )
+5. pngnq-s9 
+6. optipng 
+7. (totally optional) zenity (for GUI) (v2 only) 
 
+What would initial setup install ? 
+1. python-telegram-bot
+2. signalstickers-client
+3. Dependencies uninstalled if you are in ARCH and/or UBUNTU 
 
 ---
-Intial setup 
+V3 as well as V2  Intial setup 
 1. Get Telegram Bot token ready
 2. Now open Signal Desktop 
     - Goto Menu 
@@ -29,6 +38,24 @@ Intial setup
 
 #### Don't share both of these with anyone else
 
+#### V3 and V2 of the script  handles uploading by it's own !!!!
+What does v2 of this script does?
+
+Asks you for stickerpack link of Telegram
+Gives you stickerpack link of Signal :")
+
+---
+
+#### What if My stickerpack failed to upload? (Network issues etc)
+Don't you worry, got you there. Just run the command again and it would
+ask to upload packs not uploaded before due to network issues etc.
+
+You can choose to restore/upload backups created or convert a new stickerpack to signal 
+
+Can be done using both CLI and GUI 
+
+Once those are uploaded they would be deleted from hard drive.
+
 #### How to see what all packs i converted with this script ?
 
 ```
@@ -38,7 +65,7 @@ cat packs
 
 #### Background 
 
-For v3, v2 and binary you need just the link to stickerpack, __NO NEED TO DOWNLOAD TGS FILES__
+For v3 and v2 you need just the link to stickerpack, __NO NEED TO DOWNLOAD TGS FILES__
 Just have links like "https://t.me/addstickers/HalloUtya" and that's enough !!!!
 
 For bot to upload on your behalf, using your account credentials given above.
@@ -48,7 +75,7 @@ If you want telegram bot token get it using [BotFather](https://t.me/BotFather) 
 Once Intial setup , from next time just sending link would be enough.
 
 --- 
-### Usage of v3 script  (for v2 change name)
+### Usage of v3 script  (and v2 change name)
 
 ```
 ./script_v3_beta.sh 
@@ -56,13 +83,8 @@ Once Intial setup , from next time just sending link would be enough.
 ./script_v3_beta.sh <filename>
 
 Where file has list of Telegram sticker links
-```
 
-### Usage of Binary 
 ```
-cargo r --release <link> <link> <link>
-```
-
 <details><summary> Internal working of v1 and v2 </summary>
 Usage of v1 of script 
 
