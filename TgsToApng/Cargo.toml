@@ -6,16 +6,15 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-[dependencies]
-png = "0.17.1"
+png = "0.17.2"
 apng = "0.2.0"
 image = "0.23.14"
-imagequant = "3.0.3+sys2.14.0"
+imagequant = "3.1.0+sys2.16.0"
 threadpool = "1.8.1"
 oxipng = "5.0.0"
-flate2 = "1.0"
-libc = "0.2.102"
-teloxide-core = "0.3.3"
-futures = { version = "0.3", features = ["thread-pool"] }
-tokio = { version = "1.11.0", features = ["full"] }
+flate2 = "1.0.22"
+libc = "0.2.107"
+teloxide-core = "0.3.4"
+futures = { version = "0.3.17", features = ["thread-pool"] }
+tokio = { version = "1.13.0", features = ["full"] }
 
