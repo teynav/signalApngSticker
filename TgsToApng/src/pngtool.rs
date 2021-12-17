@@ -18,6 +18,7 @@ use std::path::PathBuf;
 use threadpool::ThreadPool;
 use std::path::Path;
 use std::process::Command;
+use std::process::Stdio;
 pub struct Pngquant {
     name : String,
     height : u32 ,
@@ -254,31 +255,40 @@ pub fn makedirect (s : &str , out : &str , delay : u32 ) -> f32 {
     filesize/1024.0
 }
 
-pub fn stich(name : &str, output : &str , dataw : u32) {
-      let thisapng = PngDecoder::new(File::open(name).unwrap()).unwrap();
-      let theapng = thisapng.apng();
-      let frames = theapng.into_frames();
-      
-      let bufw = BufWriter::new(File::create(output).unwrap());
-      let newpng = PngEncoder::new_with_quality(bufw, image::png::CompressionType::Fast, image::png::FilterType::Sub);
-      let mut imagecont = vec![];
-      let mut found = 0 ;
-      for frame in frames {
-          found +=1;
-          let buf=frame.unwrap().into_buffer();
-          let  buf= buf.pixels();
-          for pix in buf {
-                  imagecont.push(pix.0[0]);
-                  imagecont.push(pix.0[1]);
-                  imagecont.push(pix.0[2]);
-                  imagecont.push(pix.0[3]);
-          }
-      }
-      
-      newpng.encode(&imagecont, dataw, dataw*found, image::ColorType::Rgba8).unwrap();
+// pub fn stich(name : &str, output : &str , dataw : u32) {
+//       let thisapng = PngDecoder::new(File::open(name).unwrap()).unwrap();
+//       let theapng = thisapng.apng();
+//       let frames = theapng.into_frames();
+//       
+//       let bufw = BufWriter::new(File::create(output).unwrap());
+//       let newpng = PngEncoder::new_with_quality(bufw, image::png::CompressionType::Fast, image::png::FilterType::Sub);
+//       let mut imagecont = vec![];
+//       let mut found = 0 ;
+//       for frame in frames {
+//           found +=1;
+//           let buf=frame.unwrap().into_buffer();
+//           let  buf= buf.pixels();
+//           for pix in buf {
+//                   imagecont.push(pix.0[0]);
+//                   imagecont.push(pix.0[1]);
+//                   imagecont.push(pix.0[2]);
+//                   imagecont.push(pix.0[3]);
+//           }
+//       }
+//       
+//       newpng.encode(&imagecont, dataw, dataw*found, image::ColorType::Rgba8).unwrap();
+// }
+// 
+
+
+ pub fn stich(name : &str, output : &str , dataw : u32) {
+
+    let mut child = Command::new("apngdis").arg(name).arg("-s").stdout(Stdio::null()).spawn().expect("Failed to run the apngdis, exiting");
+    if ! child.wait().expect("Failed to run apngdis").success() {
+        panic!("Can't run apngdis");
+    }
+    child.wait();
 }
-
-
 pub fn bypass(SCALE : u32,FRAME : u32,PFRAME : u32, input : String , locate : &str, tempo : String){
     let x= ImgReader::open(&input).unwrap();
     let (w,h) = x.into_dimensions().unwrap();

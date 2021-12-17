@@ -44,8 +44,8 @@ pub fn make(workdir : &String , finaldes : String ) {
         else {
             tgsup::tgs_to_png("".to_owned()+&thedir+"path.json" , "".to_owned()+&thedir+"/frames/" , 5, OSCALE, TOTFRAME);
             ffmpeg::launchAt(&("".to_owned()+&thedir+"frames/%d.png"), &("".to_owned()+&thedir+"output.apng"), OSCALE, OFRAME, IFPS);
-            pngtool::stich(&("".to_owned()+&thedir+"output.apng"),&("".to_owned()+&thedir+"output_mod.png"), OSCALE);
-            let mut this= pngtool::Pngquant::new(&("".to_owned()+&thedir+"output_mod.png"), &("".to_owned()+&thedir+"output_quant.png"));
+            pngtool::stich(&("".to_owned()+&thedir+"output.apng"),&("".to_owned()+&thedir+"output_strip.png"), OSCALE);
+            let mut this= pngtool::Pngquant::new(&("".to_owned()+&thedir+"output_strip.png"), &("".to_owned()+&thedir+"output_quant.png"));
             this.quantify();
             this.bettercompress(true);
             this.breakinto(&("".to_string()+&thedir+"final/"));
