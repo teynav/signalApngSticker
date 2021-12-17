@@ -11,7 +11,7 @@ What do I need to run this program? Linux , Windows (only for Rust program)
 Look for Script folder on details about script
 
 For Rust program , you would need 
-1. Apngasm
+1. Apngasm and Apngdis
 2. Tgs2Png
 3. Ffmpeg
 4. Python for singalstickers_client in uploader.py
