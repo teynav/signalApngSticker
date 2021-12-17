@@ -55,7 +55,7 @@ pub fn make(workdir : &String , finaldes : String ) {
         pngtool::compressat(&("".to_string()+&thedir+"final/"));
         let randname= SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_secs().to_string();
         let randname = "".to_string()+&thedir+&randname+".apng";
-        let fsize= pngtool::makedirect(&("".to_string()+&thedir+"final/"), &randname, delay) as u32 ;
+        let fsize= pngtool::makedirect(&("".to_string()+&thedir+"final/"), &randname, delay) ;
         println!("Trying {}WxH at FPS {} on {}.gz got File Size of {}kb", OSCALE, OFRAME, finaldes , fsize);
 
         // if fsize < 300 {
@@ -67,8 +67,8 @@ pub fn make(workdir : &String , finaldes : String ) {
 
        // println!("Previous {} , Final {} , and This {} ", previ,finald,randname);
         if previousf.eq(""){
-            if fsize < 300 {
-                  if OFRAME==FO_FRAME && OSCALE ==FO_SCALE && fsize < 280 {
+            if fsize < 299.9 {
+                  if OFRAME==FO_FRAME && OSCALE ==FO_SCALE && fsize < 280.0 {
                       previousf=randname;
                     let (OS, OF) = movethis(OSCALE, OFRAME, &VAL, true, times);
                     // println!("Changing {} , {}FPS for {} to {} , {} FPS ",&OSCALE,&OFRAME,finaldes,OS,OF);
@@ -89,18 +89,18 @@ pub fn make(workdir : &String , finaldes : String ) {
 
         }
         else  {
-            if OFRAME == 20 && OSCALE == 512 {
+            if (OFRAME == 20 && OSCALE == 512) && fsize < 299.9 {
                 fs::rename(randname, finald).unwrap();
                 break;
             }
-            else if fsize < 280 {
+            else if fsize < 280.0 {
                 previousf=randname;
                 let (OS, OF) = movethis(OSCALE, OFRAME, &VAL, true, times);
                 // println!("Changing {} , {}FPS for {} to {} , {} FPS ",&OSCALE,&OFRAME,finaldes,OS,OF);
                 OFRAME=OF;
                 OSCALE=OS;
             }
-            else if fsize < 300 {
+            else if fsize < 299.9 {
                 fs::rename(randname, finald).unwrap();
                 break;
             }
