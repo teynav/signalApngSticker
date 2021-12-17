@@ -61,9 +61,32 @@ pub struct Pngquant {
 
         }
         let ref mut thisnewenc = imgq.new_image(&encc, self.width.try_into().unwrap()  , self.height.try_into().unwrap()  , 0.0).unwrap();
-        let  (colorp , pixels) = imgq.quantize(&thisnewenc).unwrap().remapped(thisnewenc).unwrap();
+        let  mut colorp = vec![] ; 
+        let  mut pixels = vec![] ; 
+        let  temp = imgq.quantize(&thisnewenc);
+        let mut temp1;
 
-        let mut bufw = BufWriter::new(File::create(&self.newfile).unwrap());
+        match temp {
+            Ok(a) => temp1=a, 
+            Err(_)=> {
+                   println!("Issue with {} Increasing Quality ", &self.name);
+                  let mut imgq1 = imagequant::new();
+                  imgq1.set_speed(3);
+                  imgq1.set_quality(60, 90);
+                  imgq1.set_last_index_transparent(true);
+                  let ref mut thisnewenc1 = imgq1.new_image(&encc, self.width.try_into().unwrap()  , self.height.try_into().unwrap()  , 0.0).unwrap();
+                  temp1 = imgq1.quantize(&thisnewenc1).unwrap();
+                 }
+        }
+        match temp1.remapped(thisnewenc) {
+            Ok((x,y)) => {
+                colorp=x;
+                pixels=y;
+                },
+            Err(_) => () 
+        }
+
+        let  bufw = BufWriter::new(File::create(&self.newfile).unwrap());
         let mut newpng = Encoder::new(bufw,self.width,self.height);
         newpng.set_depth(png::BitDepth::Eight);
         newpng.set_compression(png::Compression::Best);
