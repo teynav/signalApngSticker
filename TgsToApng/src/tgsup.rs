@@ -9,11 +9,12 @@ use std::fs::{File};
 use std::io::{BufReader, BufWriter, Read, Write};
 use std::process::Stdio;
 
-pub fn try_upload(program : &str ,pack_name : &str , pack_author : &str , userid : &str , pass : &str , emoji : &str , location : &str , start : u32 , end : u32  ) {
+pub fn try_upload(program : &str ,pack_name : &str , pack_author : &str , userid : &str , pass : &str , emoji : &str , location : &str , start : u32 , end : u32  ) -> bool {
     let mut child = Command::new(&program).arg("uploader.py").arg(&pack_name).arg(&pack_author).arg(&userid).arg(&pass).arg(&emoji).arg(&location).arg(&start.to_string()).arg(&end.to_string()).spawn().expect("Failed to run the task, exiting");
     if ! child.wait().expect("Failed to run").success() {
-        panic!("Can't upload due to some issue");
+        return false;
     }
+    true 
 }
 pub fn try_decode(file : &str , location : &str ) {
     let mut bufr = BufReader::new(File::open(file).unwrap());

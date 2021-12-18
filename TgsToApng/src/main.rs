@@ -1,6 +1,6 @@
 use std::fs::{self, File , OpenOptions};
 use std::path::Path;
-use std::io::{self, BufReader, prelude::*};
+use std::io::{self, BufReader, prelude::*, BufWriter};
 use std::process::{Command, Stdio};
 use std::env;
 use threadpool::ThreadPool;
@@ -125,9 +125,92 @@ fn sanitycheck() -> String {
 
     return pyname;
 }
+fn backup () {
+    let backupF = ".backupList";
+    let backupD = ".backD";
+    let mut count = 0 ;
+    let mut allback = vec![];
+    if !Path::new(&backupF).exists() || !Path::new(&backupF).is_file() {
+        fs::File::create(&backupF).unwrap();
+        fs::remove_dir_all(&backupD).ok();
+    }
+    else {
+        let ff= File::open(&backupF).expect("BackupFile Must Exist");
+        let mut bufr = BufReader::new(ff);
+        loop {
+            let mut otherback = String::from("");
+            let status = bufr.read_line(&mut otherback);
+            match status {
+                Err(_) => break, 
+                _ => (), 
+            }
+            otherback.retain(|c| c!='\n');
+            let num = otherback.parse::<i32>();
+            let mut finalnum = 0 ;
+            match num {
+                Err(_) => println!("Backup File Corrupted"),
+                Ok(a) => finalnum = a, 
+            }
+            allback.push(finalnum);
+        }
+        loop {
+            let result = allback.binary_search(&&count);
+            match result {
+                Err(_) => break ,
+                _ => (),
+            }
+            count=count+1; 
+        }
+    }
+    fs::create_dir_all(format!("{}/{}",&backupD,&count)).ok();
+    fs::rename("upload",format!("{}/{}/upload",&backupD,&count)).ok();
+    fs::rename("emoji",format!("{}/{}/emoji",&backupD,&count)).ok();
+    fs::rename("outputdir",format!("{}/{}/outputdir",&backupD,&count)).ok();
+    let tmm = OpenOptions::new().append(true).read(false).write(true).open(&backupF).unwrap();
+    let mut tmm = BufWriter::new(tmm);
+    write!(tmm, "{}\n" , count).ok();
+}
+fn restore (binary : &str) {
+    fs::remove_dir_all("outputdir").ok();
+    fs::remove_file("emoji").ok();
+    fs::remove_file("upload").ok();
+    let backup_f = ".backupList";
+    let backup_d = ".backD";
+    let mut allback = vec![];
+    if !Path::new(&backup_f ).exists() || !Path::new(&backup_f).is_file() || Path::new(&backup_d).is_dir() {
+        ()
+    }
+    let ff= File::open(&backup_f).expect("BackupFile Must Exist");
+    let mut bufr = BufReader::new(ff);
+    loop {
+        let mut otherback = String::from("");
+        let status = bufr.read_line(&mut otherback);
+        match status {
+            Err(_) => break, 
+            _ => (), 
+        }
+        otherback.retain(|c| c!='\n');
+        let num = otherback.parse::<i32>();
+        let mut finalnum = 0 ;
+        match num {
+            Err(_) => println!("Backup File Corrupted"),
+            Ok(a) => finalnum = a, 
+        }
+        allback.push(finalnum);
+    }
+    for count in allback {
+        fs::rename(format!("{}/{}/upload",&backup_d,&count), "upload").ok();
+        fs::rename(format!("{}/{}/emoji",&backup_d,&count),"emoji").ok();
+        fs::rename(format!("{}/{}/outputdir",&backup_d,&count),"outputdir").ok();
+        do_just_upload(binary);
+        fs::remove_dir_all("outputdir").ok();
+        fs::remove_file("emoji").ok();
+        fs::remove_file("upload").ok();
 
+    }
+}
 fn execute_it(total : u32, name : String, auth : String , suuid : String , pass : String, binary : &String, thread : usize){
-    
+
     let thisp = ThreadPool::new(thread);
     let binary = &binary.to_owned();
     for i in 0..total {
@@ -143,12 +226,16 @@ fn execute_it(total : u32, name : String, auth : String , suuid : String , pass 
     let file_up = File::create("upload").unwrap();
     write!(&file_up , "{}\n", &name ).unwrap();
     write!(&file_up , "{}\n", &total ).unwrap();
-    tgsup::try_upload(binary, &name, &auth, &suuid, &pass, "emoji", "outputdir/", 0, total);
+    let isdone = tgsup::try_upload(binary, &name, &auth, &suuid, &pass, "emoji", "outputdir/", 0, total);
+    if !isdone {
+        panic!("Couldn't upload the stickerpack!");
+        backup();
+    }
 }
 
 fn process_each(stickp : &String, python : &String){
-    fs::remove_dir_all("outputdir");
-    fs::remove_dir_all("processdir");
+    fs::remove_dir_all("outputdir").ok();
+    fs::remove_dir_all("processdir").ok();
     fs::create_dir("outputdir").expect("Can't create outputdir, A FileSystem issue? ");
     fs::create_dir("processdir").expect("Can't create processdir, A FileSystem issue?");
 
@@ -201,7 +288,11 @@ fn do_just_upload(binary : &str){
     name.retain(|c|  c !='\n');
     total.retain(|c| c !='\n');
     let total = total.parse::<u32>().unwrap();
-    tgsup::try_upload(binary, &name, &auth, &suuid, &pass, "emoji", "outputdir/", 0, total);
+    let isdone = tgsup::try_upload(binary, &name, &auth, &suuid, &pass, "emoji", "outputdir/", 0, total);
+    if !isdone {
+        panic!("Couldn't upload the stickerpack");
+        backup();
+    }
 }
 
 fn main() {
@@ -218,8 +309,12 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     for arg in args.into_iter().skip(1){
         hasdone=true;
+        println!("{}",&arg);
         let find= arg.rfind("/");
         let mut res = arg.to_owned();
+        if res.eq("-") {
+            continue;
+        }
         if res.starts_with("--up") {
             up = true ;
             break;
