@@ -46,9 +46,12 @@ async def main():
     print ("Pack name = "+ pack.title )
     print ("-->")
     ff=open("packs","a+")
-    async with StickersClient(uuid,password) as client:
-         pack_id, pack_key = await client.upload_pack(pack)
-    print("Pack uploaded!\n\nhttps://signal.art/addstickers/#pack_id={}&pack_key={}".format(pack_id, pack_key))
+    try:
+        async with StickersClient(uuid,password) as client:
+             pack_id, pack_key = await client.upload_pack(pack)
+        print("Pack uploaded!\n\nhttps://signal.art/addstickers/#pack_id={}&pack_key={}".format(pack_id, pack_key))
+    except:
+        exit(12);
     ff.write("### Pack = "+pack.title+"\n\nhttps://signal.art/addstickers/#pack_id={}&pack_key={}".format(pack_id, pack_key)+"\n---\n")
     ff.close() 
 if __name__ == '__main__':
