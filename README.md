@@ -20,7 +20,7 @@ For Rust program , you would need
 ---
 Intial setup 
 1. Get Telegram Bot token ready
-2. Now open Signal Desktop 
+2. Now open Signal Desktop in the commandline with `signal-desktop --enable-dev-tools`
     - Goto Menu 
 		- Toggle Developers tools 
 		- On there open Console 
