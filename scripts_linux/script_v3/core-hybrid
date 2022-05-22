@@ -9,6 +9,7 @@ FILE=""
 goneu=""
 
 RES=375
+TOP_RES=512 # Added this as a parameter for the stopping IF statement so users can easily set a max resolution
 GFRAMES=18
 TFRAME=20
 doframeup=2
@@ -123,7 +124,7 @@ convert  -crop $DEFAULTR $thedir/output_final.png  $thedir/final/this.png
 ff=0
 for file in $thedir/final/*.png 
 do 
-      shouldwait=$(python -c "print($f%5)")
+      shouldwait=$(python -c "print($ff%5)") # Changed from f to ff
       if [[ $shouldwait == 0 ]] 
       then
         wait 
@@ -137,12 +138,18 @@ do
       mv $thedir/final/this-$i.png $thedir/final/this-0$i.png 
 done
 #echo $DURATION is duration  for $totalfiles files 
-delayatend=$(python -c "print(round(1000/$GFRAMES))")
+#delayatend=$(python -c "print(round(1000/$GFRAMES))")
 #delayatend=50
 #echo Putting delay for each at $delayatend 
 #echo Completed optimiation !
 testf=$(uuidgen)".png"
-apngasm  -F -d $delayatend -o $testf  $thedir/final/* > /dev/null 
+num=$(echo "$DURATION * 100" | bc -l) # Numerator for the frame delay on apngasm
+den=$(echo "$ff * 100 - 90" | bc -l) # Denominator for the frame delay on apngasm
+# echo $num
+# echo $den
+
+# apngasm  -F -d $delayatend -o $testf  $thedir/final/* > /dev/null # Old command
+apngasm $testf $thedir/final/* $num $den -f > /dev/null # New command
 
 a=$(du $testf | sed -e "s/\s.*png//")
 if [ $a -gt "299" ];
@@ -199,7 +206,7 @@ else
     else
       rm $FILE 
       FILE=$testf
-      if [[ $RES == "512" ]]
+      if [[ $RES == $TOP_RES ]]
       then
         #echo "REACHED TOP!!!"
         mv $testf result/$(echo $thefile | sed "s/tgs/png/g")
