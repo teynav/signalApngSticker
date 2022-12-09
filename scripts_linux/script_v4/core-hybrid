@@ -1,0 +1,265 @@
+#!/bin/bash 
+
+thefile=$2
+thedir="testdir/$1"
+rm -rf $thedir 
+mkdir $thedir 
+FILE=""
+#DEFAULTR="225x225"
+goneu=""
+
+RES=375
+GFRAMES=18
+TFRAME=20
+doframeup=2
+
+findthis () {
+  a=("512" "450" "400" "375" "350" "325" "300" "275" "250" "225" "200")
+  doingscale=$(python -c "print($doframeup%3)")  
+  for (( i=0 ; i<10;i++ )); do 
+    if [[ $RES == ${a[$i]} ]]; then
+      # echo  "MATCHING $doingscale with $1 "
+      if [[ "$doingscale" -ne "0" && "$1" -eq "-1" ]]; then
+        GFRAMES=$(( $GFRAMES+1 ))
+        if [[ "$GFRAMES" -eq  "21" ]]; then
+          GFRAMES=20
+          RES=${a[$(( $i+$1 ))]}
+        fi
+      elif [[ "$doingscale" -ne "0" && "$1" -eq "1" ]]; then
+        RES=${a[$(( $i+$1 ))]}
+      elif [[ "$doingscale" -eq "0" && "$1" -eq "1" ]]; then
+        GFRAMES=$(( $GFRAMES-1 ))
+        if [[ "$GFRAMES" -eq  "11" ]]; then
+          GFRAMES=12
+          RES=${a[$(( $i+$1 ))]}
+        fi
+      else
+        RES=${a[$(( $i+$1 ))]}
+      fi
+    break 
+    fi
+   done
+   doframeup=$(( $doframeup+1 ))
+  if [[ $RES == "" ]]; then
+    RES="225"
+  fi 
+}
+todo()
+{
+  if [[ $FILE != "" ]]; then
+    findthis "-1" 
+  else
+    findthis "1"
+  fi 
+}
+
+if [[ $thefile == *.tgs ]]; then
+  # Tgs is gunzipped rllotie file
+
+  gunzip -c "$thefile" > $thedir/"$thefile".json
+
+  TGS_INFO=$(tgs2png -i $thedir/"$thefile".json ) || exit 1
+
+  FRAMES=$(echo "$TGS_INFO" | awk -F'[ ,=]' '{print $5}')
+  _FPS=$(echo "$TGS_INFO" | awk -F'[ ,=]' '{print $8}')
+  DURATION=$(echo "$TGS_INFO" | awk -F'[ ,=]' '{print $11}' | sed "s/s//g")
+else
+  FRAMES=$(ffprobe -v error -select_streams v:0 -count_frames -show_entries stream=nb_read_frames -print_format default=nokey=1:noprint_wrappers=1 "$thefile")
+  _FPS=$(scale=2; ffprobe -v 0 -of csv=p=0 -select_streams v:0 -show_entries stream=r_frame_rate "$thefile" | bc)
+  DURATION=$(scale=2; echo "$FRAMES / $_FPS" | bc)
+fi
+
+printf "Working on file $thefile \nTotal Frames $FRAMES at rate $_FPS , hence total duration $DURATION s\n"
+
+convert_any () {
+  if [ $FRAMES -eq 1 ]; then
+    SIZELIMIT=299 # Limit for Signal stickers
+    # SIZELIMIT=99 # Limit for WhatsApp static stickers
+    convert_static
+  else
+    SIZELIMIT=299 # Limit for Signal stickers
+    # SIZELIMIT=499 # Limit for WhatsApp animated stickers
+    convert_animated
+  fi
+}
+
+convert_animated () {
+  rm -rf $thedir/output*
+  DEFAULTR="$RES"x"$RES"
+  rm -rf $thedir/frame 
+  mkdir $thedir/frame
+  #echo $RES
+  #echo $DEFAULTR
+  echo "Working at $RES at frames $GFRAMES in $thefile"
+
+  if [[ $thefile == *.tgs ]]; then
+    for  (( frame=0 ; frame<$FRAMES; frame++  )); do
+      f=$(( $frame+1 ))
+      shouldwait=$(python -c "print($f%3)")
+      if [[ $shouldwait == 0 ]]; then
+        wait 
+      fi
+      # printf "$shouldwait\n"
+      tgs2png -s $(( $RES*4 ))x0 -o $frame -n 1 "$thedir/$thefile.json"  > "$thedir/frame/$f.png" &
+    done
+    wait
+
+    ffmpeg -r $_FPS -y -i "$thedir/frame/%d.png" -vcodec apng -pix_fmt rgba -vf "scale=$RES:-1:flags=neighbor:sws_dither=none,scale=$RES:$RES:force_original_aspect_ratio=decrease,pad=$RES:$RES:(ow-iw)/2:(oh-ih)/2:color=black@0,setsar=1" -r $GFRAMES -plays 0 "$thedir/output.apng" &>/dev/null
+  else
+    ffmpeg -y -i $thefile -vcodec apng -f apng -pix_fmt rgba -vf "scale=$RES:-1:flags=neighbor:sws_dither=none,scale=$RES:$RES:force_original_aspect_ratio=decrease,pad=$RES:$RES:(ow-iw)/2:(oh-ih)/2:color=black@0,setsar=1" -r $GFRAMES -plays 0 "$thedir/output.apng" &>/dev/null
+  fi
+
+
+  #Now causing a strip to form 
+
+  apngdis $thedir/output.apng -s > /dev/null
+
+  #Now optimizing it 
+
+  pngnq-s9 -L -Qn -T15 -n90 -e '.1.png' "$thedir/output_strip.png"
+
+  #More optimization 
+
+  pngquant --nofs --quality 0-85 --strip --ext '.2.png' "$thedir/output_strip.1.png"
+
+  #ffmpeg -r $_FPS -i "output_strip.1.2.png" -vcodec png -vf scale=512:-1:flags=area:sws_dither=none -pix_fmt rgba -y "output_final.png"
+
+  mv $thedir/output_strip.1.2.png $thedir/output_final.png
+  rm -rf $thedir/final 
+  mkdir $thedir/final 
+  isresdiff=$(identify $thedir/output.apng | sed "s/^.*PNG //g" | sed "s/ .*//g")
+  DEFAULTR=$isresdiff
+  convert  -crop $DEFAULTR $thedir/output_final.png  $thedir/final/this.png 
+  ff=1
+  for file in $thedir/final/*.png; do 
+        shouldwait=$(python -c "print($ff%5)")
+        if [[ $shouldwait == 0 ]]; then
+          wait 
+        fi 
+        ( optipng -o4 $file > /dev/null 2>&1 && convert -quality 85 $file $file > /dev/null  2>&1 ) &
+        ff=$(( $ff+1 ))
+  done
+  wait
+  # for (( i=0 ; i<10 ; i++ )) ;
+  # do
+  #       mv $thedir/final/this-$i.png $thedir/final/this-0$i.png 
+  # done
+
+  if [[ ! -f $thedir/final/this.png ]]; then # Only this.png exists if only one frame exists
+    for file in $thedir/final/*.png; do
+          i=$(echo "$file" | sed -e 's/.*this-\(.*\)\.png/\1/')
+          i_padded=$(printf "%03d" $i)
+          file_new=$(echo "$file" | sed -r "s/(this-).*(\.png)/\1${i_padded}\2/g")
+          mv $file $file_new
+    done
+  fi
+
+  #echo $DURATION is duration  for $totalfiles files 
+  delayatend=$(python -c "print(round(1000/$GFRAMES))")
+  #delayatend=50
+  #echo Putting delay for each at $delayatend 
+  #echo Completed optimiation !
+  testf=$(uuidgen)".png"
+  apngasm -F -d $delayatend -o $testf  $thedir/final/* > /dev/null
+
+  checksize
+}
+
+convert_static () {
+  rm -rf $thedir/output*
+  DEFAULTR="$RES"x"$RES"
+  rm -rf $thedir/frame 
+  mkdir $thedir/frame
+  #echo $RES
+  #echo $DEFAULTR
+  echo "Working at $RES in $thefile"
+
+  if [[ $thefile == *.tgs ]]; then
+    tgs2png -s $(( $RES*4 ))x0 -o 1 -n 1 "$thedir/$thefile.json"  > "$thedir/frame/1.png"
+    ffmpeg -r 1 -y -i "$thedir/frame/1.png" -vcodec apng -pix_fmt rgba -vf "scale=$RES:-1:flags=neighbor:sws_dither=none,scale=$RES:$RES:force_original_aspect_ratio=decrease,pad=$RES:$RES:(ow-iw)/2:(oh-ih)/2:color=black@0,setsar=1" "$thedir/output.apng"
+  else
+    ffmpeg -y -i $thefile -vcodec apng -pix_fmt rgba -vf "scale=$RES:-1:flags=neighbor:sws_dither=none,scale=$RES:$RES:force_original_aspect_ratio=decrease,pad=$RES:$RES:(ow-iw)/2:(oh-ih)/2:color=black@0,setsar=1" "$thedir/output.apng"
+  fi
+  mv "$thedir/output.apng" "$thedir/output.png"
+
+  testf=$(uuidgen)".png"
+
+  pngnq-s9 -L -Qn -T15 -n90 -e '.1.png' "$thedir/output.png"
+
+  pngquant --nofs --quality 0-85 --strip --ext '.2.png' "$thedir/output.1.png"
+
+  optipng -o4 "$thedir/output.1.2.png" > /dev/null 2>&1
+
+  convert -quality 85 "$thedir/output.1.2.png" $testf > /dev/null  2>&1
+
+  checksize
+}
+
+checksize () {
+  a=$(du $testf | sed -e "s/\s.*png//")
+  if [ $a -gt $SIZELIMIT ]; then
+    if [[ $FILE == "" ]]; then
+      if [[ $RES == "225" ]]; then
+        if [[ $GFRAMES -gt "3" ]]; then
+            GFRAMES=$(( $GFRAMES-1 ))
+            rm -rf $thedir/output*
+            rm -rf $testf
+            echo "Forced to lower frame rate=$GFRAMES otherwise quality would suffer check $thefile !"
+            convert_any
+            exit
+          else
+            printf "Can't do it with lowest resolution quality and WITH frame rate of $GFRAMES check $thefile "
+            exit 1
+        fi
+      fi 
+      # echo "Repeating with lower Resolution"
+      rm -rf $thedir/output*
+      rm -rf $testf
+      # printf "\n"
+      goneu="x"
+      todo
+      convert_any
+      return 0
+    else
+      mv $FILE result/$(echo $thefile | sed "s/tgs/png/g;s/webm/png/g;s/webp/png/g")
+      rm -rf $testf
+      rm -rf $thedir
+      printf "\nCompleted working on $thefile\n"
+      return 0
+    fi 
+    return 1
+  else
+    if [[ $FILE == "" ]]; then
+      FILE=$testf
+      rm -rf $thedir/output*
+      if [[ $goneu == "x" ]]; then
+        # mv $testf result/$(echo $thefile | sed "s/tgs/png/g;s/webm/png/g;s/webp/png/g")
+        # rm -rf $testf
+        # rm -rf $thedir
+        # printf "\n\n\n"
+        # return 0
+        doframeup=1 
+      fi
+      todo
+      convert_any
+    else
+      rm $FILE 
+      FILE=$testf
+      if [[ $RES == "512" ]]; then
+        # echo "REACHED TOP!!!"
+        mv $testf result/$(echo $thefile | sed "s/tgs/png/g;s/webm/png/g;s/webp/png/g")
+        rm -rf $testf
+        rm -rf $thedir
+        printf "\nCompleted working on $thefile\n"
+        return 0
+      else
+        rm -rf $thedir/output*
+        todo
+        convert_any
+      fi
+    fi
+  fi
+}
+
+convert_any
+#convert_any "225" "225x225" || convert_animated "512" "512x512" || convert_animated "400" "400x400" || convert_animated "350" "350x350" || convert_animated "300" "300x300"  || convert_animated "275" "275x275" || convert_animated "250" "250x250" ||  echo "File $thefile has been failed to be made smaller"

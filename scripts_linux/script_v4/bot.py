@@ -21,13 +21,13 @@ async def main():
         if count == 1:
             return name
         return name+" Part "+str((done+1))
-    f = open("token", "r")
-    token=f.readline().split("\n")[0]
-    author=f.readline().split("\n")[0]
-    uuid= f.readline().split("\n")[0]
-    password =f.readline().split("\n")[0]
-    f = open("pack", "r")
-    text = f.read()
+    with open("token") as f:
+        token=f.readline().split("\n")[0]
+        author=f.readline().split("\n")[0]
+        uuid= f.readline().split("\n")[0]
+        password =f.readline().split("\n")[0]
+    with open('pack') as f:
+        text = f.read()
     sticker_name = ""
     emoji = open("emoji" , "r")
     try:
@@ -66,12 +66,11 @@ async def main():
         print ("password (DO NOT SHARE)="+password)
         print ("Pack name = "+ pack.title )
         print ("-->")
-        ff=open("packs","a+")
-        async with StickersClient(uuid,password) as client:
-             pack_id, pack_key = await client.upload_pack(pack)
-        print("Pack uploaded!\n\nhttps://signal.art/addstickers/#pack_id={}&pack_key={}".format(pack_id, pack_key))
-        ff.write("### Pack = "+pack.title+"\n\nhttps://signal.art/addstickers/#pack_id={}&pack_key={}".format(pack_id, pack_key)+"\n---\n")
-        ff.close() 
+        with open("packs","a+") as ff:
+            async with StickersClient(uuid,password) as client:
+                pack_id, pack_key = await client.upload_pack(pack)
+            print("Pack uploaded!\n\nhttps://signal.art/addstickers/#pack_id={}&pack_key={}".format(pack_id, pack_key))
+            ff.write("### Pack = "+pack.title+"\n\nhttps://signal.art/addstickers/#pack_id={}&pack_key={}".format(pack_id, pack_key)+"\n---\n")
         doneloop=doneloop+1
 
 if __name__ == '__main__':
