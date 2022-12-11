@@ -191,7 +191,7 @@ convert_static () {
     tgs2png -s $(( $RES*4 ))x0 -o 1 -n 1 "$thedir/$thefile.json"  > "$thedir/frame/1.png"
     ffmpeg -r 1 -y -i "$thedir/frame/1.png" -vcodec apng -pix_fmt rgba -vf "scale=$RES:-1:flags=neighbor:sws_dither=none,scale=$RES:$RES:force_original_aspect_ratio=decrease,pad=$RES:$RES:(ow-iw)/2:(oh-ih)/2:color=black@0,setsar=1" "$thedir/output.apng"
   else
-    ffmpeg -y -i $thefile -vcodec apng -pix_fmt rgba -vf "scale=$RES:-1:flags=neighbor:sws_dither=none,scale=$RES:$RES:force_original_aspect_ratio=decrease,pad=$RES:$RES:(ow-iw)/2:(oh-ih)/2:color=black@0,setsar=1" "$thedir/output.apng"
+    ffmpeg -c:v libvpx-vp9 -y -i $thefile -vcodec apng -pix_fmt rgba -vf "scale=$RES:-1:flags=neighbor:sws_dither=none,scale=$RES:$RES:force_original_aspect_ratio=decrease,pad=$RES:$RES:(ow-iw)/2:(oh-ih)/2:color=black@0,setsar=1" "$thedir/output.apng"
   fi
   mv "$thedir/output.apng" "$thedir/output.png"
 
