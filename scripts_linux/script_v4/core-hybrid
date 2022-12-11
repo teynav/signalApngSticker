@@ -13,6 +13,12 @@ GFRAMES=18
 TFRAME=20
 doframeup=2
 
+
+# Webm files are big and most of them have RES=225-300 at the end of conversion
+# SO it's better to start with something in between hence have a better output
+# time
+# Maybe support for custom RES and FRAMES in .script_v4 
+# TODO
 if [[ $thefile == *.webm ]];then
     RES=275
     GFRAMES=15
