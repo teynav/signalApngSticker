@@ -13,6 +13,11 @@ GFRAMES=18
 TFRAME=20
 doframeup=2
 
+if [[ $thefile == *.webm ]];then
+    RES=275
+    GFRAMES=15
+fi 
+    
 findthis () {
   a=("512" "450" "400" "375" "350" "325" "300" "275" "250" "225" "200")
   doingscale=$(python -c "print($doframeup%3)")  

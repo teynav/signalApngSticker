@@ -411,7 +411,7 @@ if [[ $1 == "--convert" ]]; then
 	porter
 	exit
 elif [[ $1 == "--help" ]]; then 
-	log "v3.0 Start script with \n\n ./script_v3.sh <filename> \n ./script_v3.sh \n ./script_v3.sh --convert ( Just converts the given tgs to apng)"
+	log "v3.0 Start script with \n\n ./script_v3.sh <filename> \n ./script_v3.sh \n ./script_v3.sh --convert ( Just converts the given tgs/webm to apng)"
 	exit 
 fi 
 
