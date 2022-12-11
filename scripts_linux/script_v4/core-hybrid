@@ -105,6 +105,8 @@ convert_animated () {
     wait
 
     ffmpeg -r $_FPS -y -i "$thedir/frame/%d.png" -vcodec apng -pix_fmt rgba -vf "scale=$RES:-1:flags=neighbor:sws_dither=none,pad=$RES:$RES:(ow-iw)/2:(oh-ih)/2:color=black@0,setsar=1" -r $GFRAMES -plays 0 "$thedir/output.apng" &>/dev/null
+  elif [[ $thefile == *.webm ]]; then
+    ffmpeg -c:v libvpx-vp9 -y -i $thefile -vcodec apng -f apng -pix_fmt rgba -vf "scale=$RES:-1:flags=neighbor:sws_dither=none,pad=$RES:$RES:(ow-iw)/2:(oh-ih)/2:color=black@0,setsar=1" -r $GFRAMES -plays 0 "$thedir/output.apng" &>/dev/null
   else
     ffmpeg -y -i $thefile -vcodec apng -f apng -pix_fmt rgba -vf "scale=$RES:-1:flags=neighbor:sws_dither=none,pad=$RES:$RES:(ow-iw)/2:(oh-ih)/2:color=black@0,setsar=1" -r $GFRAMES -plays 0 "$thedir/output.apng" &>/dev/null
   fi
