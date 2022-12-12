@@ -13,8 +13,8 @@ pub fn make(workdir: &String, finaldes: String, is_video: bool, initial: String)
         (tot_frame, input_fps) = tgsup::try_tgs_info(&("".to_owned() + &workdir + "/path.json"));
     } else {
         (tot_frame, input_fps) = ffmpeg::get_info_webm(&initial);
-        println!("tot_frame {}", &tot_frame);
-        println!("input_fps {}", &input_fps);
+//        println!("tot_frame {}", &tot_frame);
+//        println!("input_fps {}", &input_fps);
     }
     let val = [512, 450, 400, 375, 350, 325, 300, 275, 250, 225];
     // Change if else below if value is changed

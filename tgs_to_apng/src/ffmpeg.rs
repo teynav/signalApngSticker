@@ -97,7 +97,7 @@ pub fn extract_vp9(location : String , name : &String , scale : u32 , frame : u3
        .arg("-plays")
        .arg("0")
        .arg(&location)
-       .stdout(Stdio::null)
+       .stdout(Stdio::null())
        .output()
        .expect("ffmpeg failed !");
     let mut stdout = String::from_utf8(child.stderr).unwrap();

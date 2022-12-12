@@ -287,7 +287,7 @@ fn execute_it(
                 );
                 println!("Starting to Convert {}.gz ", i);
             } else {
-                println!("Trying the webm/vp9");
+                println!("Starting to Convert {}.webm",&i);
                 extension = ".webm";
             }
             makeapng::make(&workdir, i.to_string(), is_video, i.to_string()+".webm");
