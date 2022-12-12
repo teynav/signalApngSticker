@@ -38,8 +38,6 @@ pub fn get_info_webm(file: &String) -> (u32,u32) {
         .expect("Failed with ffprobe");
     // extract the raw bytes that we captured and interpret them as a string
     let stdout = String::from_utf8(output.stdout).unwrap();
-    println!("{}",&stdout);
-    println!("{}", String::from_utf8(output.stderr).unwrap());
     let frames :u32 = stdout.trim().parse().unwrap();
 
     let settings="stream=r_frame_rate";
@@ -57,7 +55,6 @@ pub fn get_info_webm(file: &String) -> (u32,u32) {
         .expect("Failed with ffprobe");
 
     let mut stdout = String::from_utf8(output.stdout).unwrap();
-    println!("{}",&stdout);
     let mut second =String::from("");
     let mut first=String::from("");
      let find = stdout.rfind("/");
@@ -72,7 +69,6 @@ pub fn get_info_webm(file: &String) -> (u32,u32) {
     second=second.trim().to_owned();
     let int1 : u32 = first.parse().unwrap();
     let int2 : u32 = second.parse().unwrap();
-    println!("File {} that has frames {} and fps {}/{} ",file,frames,int1,int2 );
     (frames,int1/int2)
 }
 
@@ -101,8 +97,8 @@ pub fn extract_vp9(location : String , name : &String , scale : u32 , frame : u3
        .arg("-plays")
        .arg("0")
        .arg(&location)
+       .stdout(Stdio::null)
        .output()
        .expect("ffmpeg failed !");
     let mut stdout = String::from_utf8(child.stderr).unwrap();
-    println!("FFMPEG {} ",stdout);
 }
