@@ -5,9 +5,17 @@ use std::time::SystemTime;
 use crate::ffmpeg;
 use crate::pngtool;
 use crate::tgsup;
-pub fn make(workdir: &String, finaldes: String) {
+pub fn make(workdir: &String, finaldes: String, is_video: bool, initial: String) {
     let thedir = "".to_owned() + workdir + "/";
-    let (tot_frame, input_fps) = tgsup::try_tgs_info(&("".to_owned() + &workdir + "/path.json"));
+    let tot_frame: u32;
+    let input_fps: u32;
+    if !is_video {
+        (tot_frame, input_fps) = tgsup::try_tgs_info(&("".to_owned() + &workdir + "/path.json"));
+    } else {
+        (tot_frame, input_fps) = ffmpeg::get_info_webm(&initial);
+        println!("tot_frame {}", &tot_frame);
+        println!("input_fps {}", &input_fps);
+    }
     let val = [512, 450, 400, 375, 350, 325, 300, 275, 250, 225];
     // Change if else below if value is changed
     //Solved
@@ -34,7 +42,6 @@ pub fn make(workdir: &String, finaldes: String) {
         fs::create_dir("".to_string() + &thedir + "frames").ok();
         fs::create_dir("".to_string() + &thedir + "final").ok();
         fs::remove_file(&("".to_owned() + &thedir + "output.apng")).ok();
-
         // New logic to bypass ffmpeg if we have scale it down anyway?? Hopefully fast
         if (fo_scale > oscale || fo_frame > oframe)
             && Path::new(&("".to_string() + &thedir + "output_quant.png")).exists()
@@ -48,20 +55,31 @@ pub fn make(workdir: &String, finaldes: String) {
                 "".to_string() + &thedir + "segment.png",
             );
         } else {
-            tgsup::tgs_to_png(
-                "".to_owned() + &thedir + "path.json",
-                "".to_owned() + &thedir + "/frames/",
-                5,
-                oscale,
-                tot_frame,
-            );
-            ffmpeg::launch_at(
-                &("".to_owned() + &thedir + "frames/%d.png"),
-                &("".to_owned() + &thedir + "output.apng"),
-                oscale,
-                oframe,
-                input_fps,
-            );
+            if is_video {
+                ffmpeg::extract_vp9(
+                    "".to_owned() + &thedir + "output.apng",
+                    &initial,
+                    oscale,
+                    oframe,
+                    input_fps,
+                );
+            } else {
+                tgsup::tgs_to_png(
+                    "".to_owned() + &thedir + "path.json",
+                    "".to_owned() + &thedir + "/frames/",
+                    5,
+                    oscale,
+                    tot_frame,
+                );
+                ffmpeg::launch_at(
+                    &("".to_owned() + &thedir + "frames/%d.png"),
+                    &("".to_owned() + &thedir + "output.apng"),
+                    oscale,
+                    oframe,
+                    input_fps,
+                );
+            }
+
             pngtool::stich(
                 &("".to_owned() + &thedir + "output.apng"),
                 &("".to_owned() + &thedir + "output_strip.png"),

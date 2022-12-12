@@ -14,7 +14,7 @@ threadpool = "1.8.1"
 oxipng = "5.0.0"
 flate2 = "1.0.22"
 libc = "0.2.107"
-teloxide-core = "0.3.4"
+teloxide = "0.11.3"
 futures = { version = "0.3.17", features = ["thread-pool"] }
 tokio = { version = "1.13.0", features = ["full"] }
 

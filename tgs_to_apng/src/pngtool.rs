@@ -244,7 +244,7 @@ pub fn compressat(s: &str) {
             Err(_) => break,
         }
         counter += 1;
-        let  opt = Options::max_compression();
+        let opt = Options::max_compression();
         let fname = filename.clone();
         jobs.execute(move || {
             oxipng::optimize(

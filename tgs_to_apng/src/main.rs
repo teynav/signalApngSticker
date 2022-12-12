@@ -271,6 +271,7 @@ fn execute_it(
     pass: String,
     binary: &String,
     thread: usize,
+    is_video: bool,
 ) {
     let thisp = ThreadPool::new(thread);
     let binary = &binary.to_owned();
@@ -278,13 +279,19 @@ fn execute_it(
         let workdir = "processdir/".to_owned() + &i.to_string();
         thisp.execute(move || {
             fs::create_dir(&workdir).expect("Can't create directories, FS error?");
-            tgsup::try_decode(
-                &(i.to_string() + ".gz"),
-                &("".to_owned() + &workdir + "/path.json"),
-            );
-            println!("Starting to Convert {}.gz ", i);
-            makeapng::make(&workdir, i.to_string());
-            fs::remove_file(i.to_string() + ".gz").unwrap();
+            let mut extension = ".gz";
+            if !is_video {
+                tgsup::try_decode(
+                    &(i.to_string() + ".gz"),
+                    &("".to_owned() + &workdir + "/path.json"),
+                );
+                println!("Starting to Convert {}.gz ", i);
+            } else {
+                println!("Trying the webm/vp9");
+                extension = ".webm";
+            }
+            makeapng::make(&workdir, i.to_string(), is_video, i.to_string()+".webm");
+            fs::remove_file(i.to_string() + &extension);
         });
     }
     thisp.join();
@@ -352,23 +359,14 @@ fn process_each(stickp: &String, python: &String) {
     bufr.read_line(&mut password)
         .expect("Token File is damaged delete ./token");
     let stuff = tgs_get::down(&token, &stickp);
-    let name;
-    let total;
-    match stuff {
-        Some(x) => {
-            name = x.0;
-            total = x.1;
-        }
-        None => {
-            println!("Please check your internet connection, or make sure token file has your correct Telegram bot token");
-            return;
-        }
-    }
+    let name = stuff.0;
+    let total = stuff.1;
+    let is_video = stuff.2;
     token.retain(|c| c != '\n');
     auth.retain(|c| c != '\n');
     suuid.retain(|c| c != '\n');
     password.retain(|c| c != '\n');
-    execute_it(total, name, auth, suuid, password, python, 4);
+    execute_it(total, name, auth, suuid, password, python, 4, is_video);
 }
 
 fn do_just_upload(binary: &str) {
@@ -425,7 +423,7 @@ fn test() -> bool {
     let path = path.to_str().unwrap();
     if path.contains("/target/release/tgs_to_apng") || path.contains("/target/debug/tgs_to_apng") {
         println!("\n Path for binary is {} \n \n Are you running cargo r --release or cargo r??? \n Another way to do it is by doing \n \n cargo install path . \n Notice \".\" at the end\n \n You can find installed binary at ~/.cargo/bin/tgs_to_apng\n You won't be able to directly execute it because your PRESENT WORKING DIRECTORY must have \"uploader.py\", Which is present inside this folder of the repo\n\n Example \n cargo install --path . \n mkdir ~/stickerdir \n cp uploader.py ~/stickerdir/ \n cd ~/stickerdr \n ~/.cargo/bin/tgs_to_apng \n\n You can also add ~/.cargo/bin to your $PATH\n\n", path);
-        
+
         return false;
     }
     true
@@ -499,7 +497,9 @@ fn main() {
         do_just_upload(&python);
     } else if !hasdone {
         if bint {
-            println!("You can also execute binary using '~/.cargo/bin/tgs_to_apng <filename> <link>' ");
+            println!(
+                "You can also execute binary using '~/.cargo/bin/tgs_to_apng <filename> <link>' "
+            );
         } else {
             println!("You can also execute binary using 'cargo r --release <filename> <link> ' ");
         }
