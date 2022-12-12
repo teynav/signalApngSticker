@@ -19,8 +19,13 @@ pub fn make(workdir: &String, finaldes: String, is_video: bool, initial: String)
     let val = [512, 450, 400, 375, 350, 325, 300, 275, 250, 225];
     // Change if else below if value is changed
     //Solved
-    let fo_frame = 18;
-    let fo_scale = val[2];
+    let mut fo_frame = 18;
+    let mut fo_scale = val[2];
+    if is_video {
+        fo_frame=15;
+        fo_scale=val[4];
+        // DO not change values after that!!
+    }
     let mut oframe = fo_frame;
     let mut oscale = fo_scale;
     let mut times: u32 = 2;
@@ -37,6 +42,7 @@ pub fn make(workdir: &String, finaldes: String, is_video: bool, initial: String)
         //                 panic!("can't be 0");
         //             }
         //             continue ;
+        let finald = "outputdir/".to_string() + &finaldes + ".png";
         fs::remove_dir_all("".to_string() + &thedir + "frames").ok();
         fs::remove_dir_all("".to_string() + &thedir + "final").ok();
         fs::create_dir("".to_string() + &thedir + "frames").ok();
@@ -91,6 +97,10 @@ pub fn make(workdir: &String, finaldes: String, is_video: bool, initial: String)
             );
             this.quantify();
             this.bettercompress(true);
+            if tot_frame == 1 {
+                fs::rename("".to_string()+&thedir+"output_quant.png" ,finald);
+                return;
+            }
             this.breakinto(&("".to_string() + &thedir + "final/"));
         }
         let delay = (1000.0 / oframe as f64) as u32;
@@ -112,7 +122,6 @@ pub fn make(workdir: &String, finaldes: String, is_video: bool, initial: String)
         //     fs::rename(&("".to_string()+&thedir+"made.apng"), "outputdir/");
         // }
         let previ = previousf.clone();
-        let finald = "outputdir/".to_string() + &finaldes + ".png";
 
         // println!("Previous {} , Final {} , and This {} ", previ,finald,randname);
         if previousf.eq("") {
