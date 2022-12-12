@@ -99,6 +99,7 @@ pub fn make(workdir: &String, finaldes: String, is_video: bool, initial: String)
             this.bettercompress(true);
             if tot_frame == 1 {
                 fs::rename("".to_string()+&thedir+"output_quant.png" ,finald);
+                println!("{} has only 1 frame, Copied to outputdir",initial);
                 return;
             }
             this.breakinto(&("".to_string() + &thedir + "final/"));
@@ -113,7 +114,7 @@ pub fn make(workdir: &String, finaldes: String, is_video: bool, initial: String)
         let randname = "".to_string() + &thedir + &randname + ".apng";
         let fsize = pngtool::makedirect(&("".to_string() + &thedir + "final/"), &randname, delay);
         println!(
-            "Trying {}WxH at FPS {} on {}.gz got File Size of {}kb",
+            "Trying {}WxH at FPS {} on {} got File Size of {}kb",
             oscale, oframe, finaldes, fsize
         );
 
