@@ -57,7 +57,7 @@ impl Pngquant {
         }
         let ref mut thisnewenc = imgq
             .new_image(
-                &encc,
+                &*encc,
                 self.width.try_into().unwrap(),
                 self.height.try_into().unwrap(),
                 0.0,
@@ -65,7 +65,7 @@ impl Pngquant {
             .unwrap();
         let mut colorp = vec![];
         let mut pixels = vec![];
-        let temp = imgq.quantize(&thisnewenc);
+        let temp = imgq.quantize(thisnewenc);
         let mut temp1;
 
         match temp {
@@ -78,13 +78,13 @@ impl Pngquant {
                 imgq1.set_last_index_transparent(true);
                 let ref mut thisnewenc1 = imgq1
                     .new_image(
-                        &encc,
+                        &*encc,
                         self.width.try_into().unwrap(),
                         self.height.try_into().unwrap(),
                         0.0,
                     )
                     .unwrap();
-                temp1 = imgq1.quantize(&thisnewenc1).unwrap();
+                temp1 = imgq1.quantize(thisnewenc1).unwrap();
             }
         }
         match temp1.remapped(thisnewenc) {

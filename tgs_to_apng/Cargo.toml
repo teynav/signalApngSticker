@@ -6,15 +6,15 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-png = "0.17.2"
+png = "0.17.7"
 apng = "0.2.0"
-image = "0.23.14"
-imagequant = "3.1.0+sys2.16.0"
+image = "0.24.5"
+imagequant = "4.0.4"
 threadpool = "1.8.1"
-oxipng = "5.0.0"
-flate2 = "1.0.22"
-libc = "0.2.107"
+oxipng = "7.0.0"
+flate2 = "1.0.25"
+libc = "0.2.138"
 teloxide = "0.11.3"
-futures = { version = "0.3.17", features = ["thread-pool"] }
-tokio = { version = "1.13.0", features = ["full"] }
+futures = { version = "0.3.25", features = ["thread-pool"] }
+tokio = { version = "1.23.0", features = ["full"] }
 
