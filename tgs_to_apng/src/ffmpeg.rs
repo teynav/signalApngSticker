@@ -72,7 +72,7 @@ pub fn get_info_webm(file: &String) -> (u32,u32) {
     (frames,int1/int2)
 }
 
-pub fn extract_vp9(location : String , name : &String , scale : u32 , frame : u32 , i_fps : u32 ) {
+pub fn extract_vp9(location : String , name : &String , scale : u32 , frame : u32 , _i_fps : u32 ) {
     
 // ffmpeg -c:v libvpx-vp9 -y -i 4.webm -vcodec apng -f apng -pix_fmt rgba -vf "scale=512:-1:flags=neighbor:sws_dither=none,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=black@0,setsar=1" -r 22 -plays 0 frames/output.apng 
  //  let settings ="scale=512:-1:flags=neighbor:sws_dither=none,scale=512:512:force_original_aspect_ratio=decrease,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=black@0,setsar=1" ;
@@ -100,5 +100,5 @@ pub fn extract_vp9(location : String , name : &String , scale : u32 , frame : u3
        .stdout(Stdio::null())
        .output()
        .expect("ffmpeg failed !");
-    let mut stdout = String::from_utf8(child.stderr).unwrap();
+    let _ = String::from_utf8(child.stderr).unwrap();
 }
