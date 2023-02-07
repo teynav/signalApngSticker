@@ -24,8 +24,8 @@ Intial setup
     - Goto Menu 
 		- Toggle Developers tools 
 		- On there open Console 
-		- Store somehwere output of window.reduxStore.getState().items.uuid_id 
-		- Also store outut of window.reduxStore.getState().items.password
+		- Store somehwere output of `window.reduxStore.getState().items.uuid_id`
+		- Also store outut of `window.reduxStore.getState().items.password`
 
 #### Don't share both of these with anyone else
 
