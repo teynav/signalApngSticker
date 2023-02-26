@@ -20,12 +20,12 @@ For Rust program , you would need
 ---
 Intial setup 
 1. Get Telegram Bot token ready
-2. Now open Signal Desktop in the commandline with `signal-desktop --enable-dev-tools`
+2. Install and launch Signal Desktop [BETA VERSION](https://support.signal.org/hc/en-us/articles/360007318471-Signal-Beta)
     - Goto Menu 
 		- Toggle Developers tools 
 		- On there open Console 
-		- Store somehwere output of window.reduxStore.getState().items.uuid_id 
-		- Also store outut of window.reduxStore.getState().items.password
+		- Store somehwere output of `window.SignalDebug.getReduxState().items.uuid_id`
+		- Also store output of `window.SignalDebug.getReduxState().items.password`
 
 #### Don't share both of these with anyone else
 
