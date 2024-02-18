@@ -115,7 +115,7 @@ You say so, but what have you done???
 
 [Contains 80+ stickerpack as of now ported from Telegram](https://signalstickers.com/?s=author%3A%22Navneet%20Vikram%20Tey%22)
 
-
+<a rel="me" href="https://mastodon.social/@navtey">Mastodon</a>
 Owwww, That's nice , How can I help you
 1. Suggestions , Signal +919519873721
 2. Donations , [PayPal](https://paypal.me/TalentedTey?locale.x=en_GB) or UPI 9519873721@ybl 
